@@ -1,0 +1,28 @@
+@import '../../styles/vars';
+
+.App__header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    &--text{
+        margin-right: 1em;
+        font-size: 1.2rem;
+    }
+    &--button{
+        outline: none;
+        border: none;
+        cursor: pointer;
+        font-size: .75rem;
+        font-weight: 700;
+        border-radius: 5px;
+        padding: 1em;
+        transition: background-color .35s ease-out;
+        &-add{
+            color: $secondary;
+            &:hover{
+                background-color: $primary;
+            }
+        }
+    }
+}
