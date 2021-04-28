@@ -8,6 +8,7 @@ const Modal = ({
 	autoSuggest,
 	handleSelect,
 	handleLimit,
+	zoneList,
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
 	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
@@ -59,18 +60,23 @@ const Modal = ({
 						</ul>
 					)}
 				</div>
-
-				<span className="modal__picture__label">Images</span>
-				<div className="modal__picture__group">
-					{imagesFake.map((image) => (
-						<img
-							key={image}
-							src={generateImage()}
-							className="modal__picture"
-							alt={image}
-						></img>
-					))}
-				</div>
+				{zoneList.map((municipality) => (
+					<>
+						<span key={municipality} className="modal__picture__label">
+							{municipality}
+						</span>
+						<div className="modal__picture__group">
+							{imagesFake.map((image) => (
+								<img
+									key={image}
+									src={generateImage()}
+									className="modal__picture"
+									alt={image}
+								></img>
+							))}
+						</div>
+					</>
+				))}
 				<div className="modal__form__submit">
 					<input
 						className="button--bordered"

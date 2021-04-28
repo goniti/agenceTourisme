@@ -9,8 +9,6 @@ const App = () => {
 	const [searchCity, setSearchCity] = useState('')
 	const [resultSuggest, setSuggest] = useState([])
 	const [selectedResults, setResults] = useState([])
-	console.log(selectedResults)
-
 	const limitReached = (message) => {
 		if (selectedResults.length > 2) {
 			return [true, message]
@@ -32,6 +30,7 @@ const App = () => {
 	}
 
 	const onSelect = (option) => {
+		//console.log("Filter",selectedResults.filter(item => item !== option));
 		setResults((oldResult) => [...oldResult, option])
 	}
 
@@ -46,6 +45,7 @@ const App = () => {
 					inputValue={searchCity}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}
+					zoneList={selectedResults}
 					handleLimit={limitReached('La liste des villes est compléter !')}
 				/>
 			)}
