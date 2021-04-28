@@ -5,7 +5,7 @@ const Modal = () => {
 		const random = Math.round(Math.random() * 1000)
 		return `https://picsum.photos/180/180?random=${random}`
 	}
-	const imagesAlt = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
+	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
 
 	return (
 		<div className="modal">
@@ -28,11 +28,12 @@ const Modal = () => {
 
 				<span className="modal__picture__label">Images</span>
 				<div className="modal__picture__group">
-					{imagesAlt.map((imageName) => (
+					{imagesFake.map((image) => (
 						<img
+							key={image}
 							src={generateImage()}
 							className="modal__picture"
-							alt={imageName}
+							alt={image}
 						></img>
 					))}
 				</div>
