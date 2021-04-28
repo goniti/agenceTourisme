@@ -1,12 +1,12 @@
 import './modal.scss'
 
-const Modal = ({ setSearch, inputValue, handleSubmit }) => {
+const Modal = ({ setSearch, inputValue, handleSubmit,autoSuggest }) => {
 	const generateImage = () => {
 		const random = Math.round(Math.random() * 1000)
 		return `https://picsum.photos/180/180?random=${random}`
 	}
 	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
-
+console.log('arrayCity', autoSuggest);
 	return (
 		<div className="modal">
 			<p className="modal__title">Création d'une zone</p>
