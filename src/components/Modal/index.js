@@ -1,4 +1,5 @@
 import './modal.scss'
+import { useState } from 'react'
 
 const Modal = ({
 	setSearch,
@@ -8,18 +9,20 @@ const Modal = ({
 	handleSelect,
 	handleSubmit,
 }) => {
+	const [openSuggest, setOpenSuggest] = useState(false)
+
+	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
 	const generateImage = () => {
 		const random = Math.round(Math.random() * 1000)
 		return `https://picsum.photos/180/180?random=${random}`
 	}
-	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
-	const inputIsEmpty = inputValue.length === 0
+
 	return (
 		<div className="modal">
 			<p className="modal__title">Création d'une zone</p>
 			<p className="modal__subtitle">Nom de la zone</p>
 
-			<form onSubmit={handleSubmit}>
+			<form>
 				<div className="modal__form__suggest">
 					<label htmlFor="city" className="suggest__label">
 						Ville
@@ -32,16 +35,20 @@ const Modal = ({
 						onChange={(event) => {
 							handleSearch()
 							setSearch(event.target.value)
+							setOpenSuggest(true)
 						}}
 					/>
-					{!inputIsEmpty && (
+					{openSuggest && (
 						<ul className="suggest__items">
 							<span className="suggest__items__label">Suggestions</span>
 							{autoSuggest.map((suggest) => (
 								<li
 									key={suggest}
 									className="suggest__item"
-									onClick={() => handleSelect(suggest)}
+									onClick={() => {
+										handleSelect(suggest)
+										setOpenSuggest(false)
+									}}
 								>
 									{suggest}
 								</li>

@@ -4,11 +4,14 @@ import Modal from '../Modal'
 import { useState } from 'react'
 
 const App = () => {
-	const [isOpen, setOpen] = useState(false)
+	const [openModal, setOpenModal] = useState(false)
 	const [error, setError] = useState(false)
 	const [searchCity, setSearchCity] = useState('')
 	const [resultSuggest, setSuggest] = useState([])
 	const [selectedResults,setResults] = useState([])
+// console.log("searchCity", searchCity);
+// console.log("resultSuggest", resultSuggest);
+// console.log("selectedResults", selectedResults);
 
 	const onChangeSearch = () => {
 		fetch(
@@ -24,31 +27,33 @@ const App = () => {
 			})
 	}
 
-	const onSubmit = (event) => {
-event.preventDefault()
-		setResults(oldResult => [...oldResult, searchCity])
-		console.log("selectedResults", selectedResults);
-	}
+	// const onSubmit = (event) => {
+	// 	event.preventDefault()
+	// 	setResults(oldResult => [...oldResult, searchCity])
+	// 	console.log("selectedResults", selectedResults);
+	// }
 
 	const onSelect = (option) => {
-		setSearchCity(option)
+		console.log(option);
+		// setSearchCity(option)
+		//setResults(oldResult => [...oldResult, option])
 	}
 	
 
 	if (error) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
-			{!isOpen && 
-			<Header createList={setOpen}/> 
+			{!openModal && 
+			<Header createList={setOpenModal}/> 
 			}
-			{isOpen && (
+			{openModal && (
 				<Modal
 					autoSuggest={resultSuggest}
 					setSearch={setSearchCity}
 					inputValue={searchCity}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}
-					handleSubmit={onSubmit}
+					// handleSubmit={onSubmit}
 				/>
 			)}
 		</div>
