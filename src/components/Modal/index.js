@@ -1,6 +1,13 @@
 import './modal.scss'
 
-const Modal = ({ setSearch, inputValue, handleSearch, autoSuggest }) => {
+const Modal = ({
+	setSearch,
+	inputValue,
+	handleSearch,
+	autoSuggest,
+	handleSelect,
+	handleSubmit,
+}) => {
 	const generateImage = () => {
 		const random = Math.round(Math.random() * 1000)
 		return `https://picsum.photos/180/180?random=${random}`
@@ -12,7 +19,7 @@ const Modal = ({ setSearch, inputValue, handleSearch, autoSuggest }) => {
 			<p className="modal__title">Création d'une zone</p>
 			<p className="modal__subtitle">Nom de la zone</p>
 
-			<form>
+			<form onSubmit={handleSubmit}>
 				<div className="modal__form__suggest">
 					<label htmlFor="city" className="suggest__label">
 						Ville
@@ -23,15 +30,19 @@ const Modal = ({ setSearch, inputValue, handleSearch, autoSuggest }) => {
 						type="text"
 						value={inputValue}
 						onChange={(event) => {
-							setSearch(event.target.value)
 							handleSearch()
+							setSearch(event.target.value)
 						}}
 					/>
 					{!inputIsEmpty && (
 						<ul className="suggest__items">
 							<span className="suggest__items__label">Suggestions</span>
 							{autoSuggest.map((suggest) => (
-								<li key={suggest} className="suggest__item">
+								<li
+									key={suggest}
+									className="suggest__item"
+									onClick={() => handleSelect(suggest)}
+								>
 									{suggest}
 								</li>
 							))}
