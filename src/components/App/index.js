@@ -5,12 +5,10 @@ import { useState } from 'react'
 
 const App = () => {
 	const [error, setError] = useState(false)
-	const [loading, setLoading] = useState(false)
 	const [searchCity, setSearchCity] = useState('')
 	const [resultSuggest, setSuggest] = useState([])
 
-	const onSubmit = () => {
-		setSearchCity('')
+	const onChangeSearch = () => {
 		fetch(
 			`https://geo.api.gouv.fr/communes?nom=${searchCity}&boost=population&limit=5`
 		)
@@ -22,13 +20,9 @@ const App = () => {
 			.catch(() => {
 				setError(true)
 			})
-			.finally(() => {
-				setLoading(true)
-			})
 	}
 
-	if (loading) return <span>Recherche en cours...</span>
-	if (error) return <span>Aucune ville trouvée...</span>
+	if (error) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
 			{/* <Header /> */}
@@ -36,7 +30,7 @@ const App = () => {
 				autoSuggest={resultSuggest}
 				setSearch={setSearchCity}
 				inputValue={searchCity}
-				handleSubmit={onSubmit}
+				handleSearch={onChangeSearch}
 			/>
 		</div>
 	)

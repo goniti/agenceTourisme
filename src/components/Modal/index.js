@@ -1,23 +1,18 @@
 import './modal.scss'
 
-const Modal = ({ setSearch, inputValue, handleSubmit,autoSuggest }) => {
+const Modal = ({ setSearch, inputValue, handleSearch, autoSuggest }) => {
 	const generateImage = () => {
 		const random = Math.round(Math.random() * 1000)
 		return `https://picsum.photos/180/180?random=${random}`
 	}
 	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
-console.log('arrayCity', autoSuggest);
+	const inputIsEmpty = inputValue.length === 0
 	return (
 		<div className="modal">
 			<p className="modal__title">Création d'une zone</p>
 			<p className="modal__subtitle">Nom de la zone</p>
 
-			<form
-				onSubmit={(e) => {
-					e.preventDefault()
-					handleSubmit()
-				}}
-			>
+			<form>
 				<div className="modal__form__suggest">
 					<label htmlFor="city" className="suggest__label">
 						Ville
@@ -29,14 +24,19 @@ console.log('arrayCity', autoSuggest);
 						value={inputValue}
 						onChange={(event) => {
 							setSearch(event.target.value)
+							handleSearch()
 						}}
 					/>
-					<ul className="suggest__items">
-						<span className="suggest__items__label">Suggestions</span>
-						<li className="suggest__item">Paris</li>
-						<li className="suggest__item">Grésy sur aix</li>
-						<li className="suggest__item">Grenoble</li>
-					</ul>
+					{!inputIsEmpty && (
+						<ul className="suggest__items">
+							<span className="suggest__items__label">Suggestions</span>
+							{autoSuggest.map((suggest) => (
+								<li key={suggest} className="suggest__item">
+									{suggest}
+								</li>
+							))}
+						</ul>
+					)}
 				</div>
 
 				<span className="modal__picture__label">Images</span>
