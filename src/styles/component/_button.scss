@@ -1,0 +1,19 @@
+.button--bordered{
+    outline: none;
+    border: none;
+    cursor: pointer;
+    font-size: .75rem;
+    font-weight: 700;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 1em;
+    transition: background-color .35s ease-out;
+    color: $lightText;
+    background-color: $secondary;
+
+    &:hover {
+        background-color: $lightText;
+        color: $secondary;
+        border: 1px solid $secondary;
+    }
+}
