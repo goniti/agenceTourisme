@@ -7,10 +7,9 @@ const Modal = ({
 	handleSearch,
 	autoSuggest,
 	handleSelect,
-	handleSubmit,
+	handleLimit,
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
-
 	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
 	const generateImage = () => {
 		const random = Math.round(Math.random() * 1000)
@@ -27,17 +26,21 @@ const Modal = ({
 					<label htmlFor="city" className="suggest__label">
 						Ville
 					</label>
-					<input
-						id="city"
-						className="suggest__input"
-						type="text"
-						value={inputValue}
-						onChange={(event) => {
-							handleSearch()
-							setSearch(event.target.value)
-							setOpenSuggest(true)
-						}}
-					/>
+					{handleLimit ? (
+						<span>{`${handleLimit[1]}`}</span>
+					) : (
+						<input
+							id="city"
+							className="suggest__input"
+							type="text"
+							value={inputValue}
+							onChange={(event) => {
+								handleSearch()
+								setSearch(event.target.value)
+								setOpenSuggest(true)
+							}}
+						/>
+					)}
 					{openSuggest && (
 						<ul className="suggest__items">
 							<span className="suggest__items__label">Suggestions</span>
