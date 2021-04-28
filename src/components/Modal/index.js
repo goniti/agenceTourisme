@@ -1,18 +1,23 @@
 import './modal.scss'
 
-const Modal = ({ setSearch, inputValue }) => {
+const Modal = ({ setSearch, inputValue, handleSubmit }) => {
 	const generateImage = () => {
 		const random = Math.round(Math.random() * 1000)
 		return `https://picsum.photos/180/180?random=${random}`
 	}
 	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
-console.log(inputValue);
+
 	return (
 		<div className="modal">
 			<p className="modal__title">Création d'une zone</p>
 			<p className="modal__subtitle">Nom de la zone</p>
 
-			<form>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault()
+					handleSubmit()
+				}}
+			>
 				<div className="modal__form__suggest">
 					<label htmlFor="city" className="suggest__label">
 						Ville
