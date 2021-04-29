@@ -1,15 +1,17 @@
 @import '../../styles/vars';
 
-.App__header{
+.App__header {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 2rem;
-    &__text{
+
+    &__text {
         margin-right: 1em;
         font-size: 1.2rem;
     }
-    &__button{
+
+    &__button {
         outline: none;
         border: none;
         cursor: pointer;
@@ -18,9 +20,11 @@
         border-radius: 5px;
         padding: 1em;
         transition: background-color .35s ease-out;
-        &--add{
+
+        &--add {
             color: $secondary;
-            &:hover{
+
+            &:hover {
                 background-color: $primary;
             }
         }
