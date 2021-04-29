@@ -10,6 +10,7 @@ const Modal = ({
 	handleSelect,
 	handleSubmit,
 	handleLimit,
+	title,
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
 	const suggestIsLoad = autoSuggest.length > 0
@@ -21,7 +22,7 @@ const Modal = ({
 
 	return (
 		<div className="modal">
-			<p className="modal__title">Création d'une zone</p>
+			<p className="modal__title">{title}</p>
 			<p className="modal__subtitle">Nom de la zone</p>
 
 			<form onSubmit={handleSubmit}>

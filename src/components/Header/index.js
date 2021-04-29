@@ -1,6 +1,6 @@
 import './header.scss'
 
-const Header = ({ createList, touristList }) => {
+const Header = ({ handleTitleModal, touristList,showModal }) => {
 	const limitZone = 3 // the 0 is taken into account
 	const numberOfzone = touristList.length
 	const remainingZone = limitZone - numberOfzone
@@ -8,11 +8,11 @@ const Header = ({ createList, touristList }) => {
 	const canStillSave = numberOfzone > 0 && numberOfzone < limitZone
 
 	return (
-		<header className="App__header">
+		<header className="App__header" onClick={()=> handleTitleModal("Création d'une zone")}>
 			{noZone && (
 				<>
 					<p className="App__header__text">Aucune zone enregistrée</p>
-					<button onClick={createList} className="button--bordered">
+					<button onClick={showModal} className="button--bordered">
 						Créez en une
 					</button>
 				</>
@@ -20,7 +20,7 @@ const Header = ({ createList, touristList }) => {
 			{canStillSave && (
 				<>
 					<p>{`Vous pouvez encore enregistrer ${remainingZone} zone(s)`}</p>
-					<button className="button--bordered" onClick={createList}>
+					<button className="button--bordered" onClick={showModal}>
 						Ajouter
 					</button>
 				</>

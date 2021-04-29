@@ -11,7 +11,8 @@ const App = () => {
 	const [resultSuggest, setSuggest] = useState({})
 	const [selectedResults, setResults] = useState([])
 	const [touristZoneSave, setSave] = useState([])
-	
+	const [titleModal, setTitleModal] = useState('')
+
 	const onChangeSearch = () => {
 		fetch(
 			`https://geo.api.gouv.fr/communes?nom=${searchCity}&boost=population&limit=5`
@@ -43,18 +44,30 @@ const App = () => {
 			return [true, message]
 		}
 	}
+	const changeTitleModal = (title) => {
+		return setTitleModal(title)
+	}
 
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
 			{!openModal && (
 				<>
-					<Header createList={setOpenModal} touristList={touristZoneSave}/>
-					<ListZone zoneSaved={touristZoneSave} />
+					<Header
+						showModal={setOpenModal}
+						touristList={touristZoneSave}
+						handleTitleModal={changeTitleModal}
+					/>
+					<ListZone
+						handleTitleModal={changeTitleModal}
+						editZone={setOpenModal}
+						zoneSaved={touristZoneSave}
+					/>
 				</>
 			)}
 			{openModal && (
 				<Modal
+					title={titleModal}
 					setSearch={setSearchCity}
 					inputValue={searchCity}
 					autoSuggest={resultSuggest}

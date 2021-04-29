@@ -1,11 +1,19 @@
 import './listzone.scss'
+import { GoDiffIgnored } from 'react-icons/go'
 
-const ListZone = ({ zoneSaved }) => (
-	<ul>
-		{zoneSaved.map((zone, index) => (
-			<li key={index}>{zone}</li>
-		))}
-	</ul>
+const ListZone = ({ zoneSaved, editZone, handleTitleModal }) => (
+	<main>
+		<h2>Mes zones touristiques</h2>
+		<span onClick={() => (handleTitleModal("Editer les zones"))}>
+			<GoDiffIgnored size={16} onClick={editZone}/>
+		</span>
+
+		<ul>
+			{zoneSaved.map((zone, index) => (
+				<li key={index}>{zone}</li>
+			))}
+		</ul>
+	</main>
 )
 
 export default ListZone
