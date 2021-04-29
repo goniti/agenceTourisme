@@ -7,7 +7,7 @@ import { useState } from 'react'
 const App = () => {
 	const [openModal, setOpenModal] = useState(false)
 	const [errorApiRequest, setError] = useState(false)
-	const [searchCity, setSearchCity] = useState('')
+	const [valueCity, setValueCity] = useState('')
 	const [resultSuggest, setSuggest] = useState({})
 	const [selectedResults, setResults] = useState([])
 	const [touristZoneSave, setSave] = useState([])
@@ -16,7 +16,7 @@ const App = () => {
 
 	const onChangeSearch = () => {
 		fetch(
-			`https://geo.api.gouv.fr/communes?nom=${searchCity}&boost=population&limit=5`
+			`https://geo.api.gouv.fr/communes?nom=${valueCity}&boost=population&limit=5`
 		)
 			.then((response) => response.json())
 			.then((json) => {
@@ -31,16 +31,19 @@ const App = () => {
 	const onSelect = (option) => {
 		//console.log("Filter",selectedResults.filter(item => item !== option));
 		setResults((oldResult) => [...oldResult, option])
+		setValueCity('')
+		setErrorMessage('')
 	}
 
 	const onSubmit = (event) => {
 		event.preventDefault()
-		if (typeof selectedResults[0] === 'string') {
-			localStorage.setItem('registeredZone', JSON.stringify(selectedResults))
-			setSave(JSON.parse(localStorage.getItem('registeredZone')))
-			setOpenModal(false)
+		if (typeof selectedResults[0] !== 'string') {
+			return setErrorMessage('choisir au minimum 1 ville')
 		}
-		return setErrorMessage("choisir au minimum 1 ville")
+
+		localStorage.setItem('registeredZone', JSON.stringify(selectedResults))
+		setSave(JSON.parse(localStorage.getItem('registeredZone')))
+		setOpenModal(false)
 	}
 
 	const limitReached = (message) => {
@@ -73,8 +76,8 @@ const App = () => {
 				<Modal
 					title={titleModal}
 					error={errorMessage}
-					setSearch={setSearchCity}
-					inputValue={searchCity}
+					setSearch={setValueCity}
+					inputValue={valueCity}
 					autoSuggest={resultSuggest}
 					zoneList={selectedResults}
 					handleSearch={onChangeSearch}
