@@ -1,17 +1,26 @@
 import './listzone.scss'
-import { GoDiffIgnored } from 'react-icons/go'
+import { GoDiffIgnored, GoTrashcan } from 'react-icons/go'
 
-const ListZone = ({ zoneSaved, editZone, handleTitleModal }) =>
+const ListZone = ({ zoneSaved, editZone, removeZone, handleTitleModal }) =>
 	zoneSaved.length > 0 && (
-		<main>
-			<h2>Mes zones touristiques</h2>
-			<span onClick={() => handleTitleModal('Editer les zones')}>
-				<GoDiffIgnored size={16} onClick={editZone} />
-			</span>
-
-			<ul>
+		<main className="listzone__wrapper">
+			<div className="listzone__header">
+				<h2>Mes zones touristiques</h2>
+				<i
+					className="listzone__icon"
+					onClick={() => handleTitleModal('Editer les zones')}
+				>
+					<GoDiffIgnored size={22} onClick={editZone} />
+				</i>
+			</div>
+			<ul className="listzone__content">
 				{zoneSaved.map((zone, index) => (
-					<li key={index}>{zone}</li>
+					<li key={index} className="listzone__item"  onClick={() => removeZone(index)}>
+						<i className="listzone__icon">
+							<GoTrashcan size={16} />
+						</i>
+						{zone}
+					</li>
 				))}
 			</ul>
 		</main>

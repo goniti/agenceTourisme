@@ -1,0 +1,43 @@
+@import '../../styles/vars';
+
+.listzone {
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-direction: column;
+        height: 40vh;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+    }
+
+    &__header {
+        @extend .listzone__item;
+        font-weight: 700;
+    }
+
+    &__content {
+        font-size: $largeText;
+        height: 20vh;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+
+
+
+    &__icon {
+        display: flex;
+        margin: 0 .35rem;
+        transition: color .3s ease-in-out;
+
+        &:hover {
+            color: $primary;
+            cursor: pointer;
+        }
+    }
+}

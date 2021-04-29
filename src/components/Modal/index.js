@@ -8,21 +8,19 @@ const Modal = ({
 	inputValue,
 	autoSuggest,
 	zoneList,
+	touristImage,
 	removeZone,
 	handleSearch,
 	handleSelect,
 	handleSubmit,
 	handleLimit,
+	handleValidate,
 	title,
 	error,
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
 	const suggestIsLoad = autoSuggest.length > 0
-	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
-	const generateImage = () => {
-		const random = Math.round(Math.random() * 1000)
-		return `https://picsum.photos/180/180?random=${random}`
-	}
+
 	
 	return (
 		<div className="modal">
@@ -44,8 +42,8 @@ const Modal = ({
 					{handleLimit ? (
 						<div className="suggest__validate">
 							<span>{`${handleLimit[1]}`}</span>
-							<div className="button--bordered">
-								Valider mes choix{' '}
+							<div className="button--bordered" onClick={handleValidate}>
+								Valider mes choix
 								<span className="suggest__validate--icon">
 									<GoTasklist size={16} />
 								</span>
@@ -64,7 +62,7 @@ const Modal = ({
 									setOpenSuggest(true)
 								}}
 							/>
-							<div className="button--bordered">Valider mes choix</div>
+							<div className="button--bordered" onClick={handleValidate}>Valider mes choix</div>
 						</div>
 					)}
 					{suggestIsLoad && openSuggest && (
@@ -90,12 +88,12 @@ const Modal = ({
 						<div key={index} className="modal__picture__wrapper">
 							<span className="modal__picture__label">{municipality}</span>
 							<div className="modal__picture__content">
-								{imagesFake.map((image) => (
+								{touristImage.map((image,index) => (
 									<img
-										key={image}
-										src={generateImage()}
+										key={index}
+										src={image.src}
 										className="modal__picture"
-										alt={image}
+										alt={image.name}
 									></img>
 								))}
 							</div>

@@ -7,16 +7,18 @@ import { useState } from 'react'
 const App = () => {
 	const [openModal, setOpenModal] = useState(false)
 	const [errorApiRequest, setError] = useState(false)
-	const [valueCity, setValueCity] = useState('')
+	const [searchData, setSearchData] = useState('')
 	const [resultSuggest, setSuggest] = useState({})
 	const [selectedResults, setResults] = useState([])
 	const [touristZoneSave, setSave] = useState([])
 	const [titleModal, setTitleModal] = useState('')
 	const [errorMessage, setErrorMessage] = useState('')
+	const [imagesFake, setImagesFake] = useState([])
+	
 
 	const onChangeSearch = () => {
 		fetch(
-			`https://geo.api.gouv.fr/communes?nom=${valueCity}&boost=population&limit=5`
+			`https://geo.api.gouv.fr/communes?nom=${searchData}&boost=population&limit=5`
 		)
 			.then((response) => response.json())
 			.then((json) => {
@@ -31,7 +33,7 @@ const App = () => {
 	const onSelect = (option) => {
 		//console.log("Filter",selectedResults.filter(item => item !== option));
 		setResults((oldResult) => [...oldResult, option])
-		setValueCity('')
+		setSearchData('')
 		setErrorMessage('')
 	}
 
@@ -46,8 +48,10 @@ const App = () => {
 		setOpenModal(false)
 	}
 
-	const onRemove = (tagIndex) => {
-		console.log('indexOf tag', tagIndex)
+	const onRemove = (id) => {
+		console.log('index =', id)
+
+		// Todo Deleting an area with confirmation
 	}
 
 	const limitReached = (message) => {
@@ -57,6 +61,17 @@ const App = () => {
 	}
 	const changeTitleModal = (title) => {
 		setTitleModal(title)
+	}
+	const onValidate = () => {
+
+		// const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
+		// const generateImage = () => {
+		// 	const random = Math.round(Math.random() * 1000)
+		// 	return `https://picsum.photos/180/180?random=${random}`
+		// }
+		 
+		console.log("validta");
+		console.log(selectedResults);
 	}
 
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
@@ -73,6 +88,7 @@ const App = () => {
 						handleTitleModal={changeTitleModal}
 						editZone={setOpenModal}
 						zoneSaved={touristZoneSave}
+						removeZone={onRemove}
 					/>
 				</>
 			)}
@@ -80,15 +96,17 @@ const App = () => {
 				<Modal
 					title={titleModal}
 					error={errorMessage}
-					setSearch={setValueCity}
-					inputValue={valueCity}
+					setSearch={setSearchData}
+					inputValue={searchData}
 					autoSuggest={resultSuggest}
 					zoneList={selectedResults}
+					touristImage={imagesFake}
 					removeZone={onRemove}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}
 					handleLimit={limitReached('La liste des villes est compléter !')}
 					handleSubmit={onSubmit}
+					handleValidate={onValidate}
 				/>
 			)}
 		</div>
