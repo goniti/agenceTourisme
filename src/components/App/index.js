@@ -1,6 +1,7 @@
 import './App.scss'
 import Header from '../Header'
 import Modal from '../Modal'
+import ListZone from '../ListZone'
 import { useState } from 'react'
 
 const App = () => {
@@ -10,7 +11,7 @@ const App = () => {
 	const [resultSuggest, setSuggest] = useState({})
 	const [selectedResults, setResults] = useState([])
 	const [touristZoneSave, setSave] = useState([])
-	console.log('save', touristZoneSave)
+	console.log('save', touristZoneSave.length)
 
 	const onChangeSearch = () => {
 		fetch(
@@ -47,7 +48,12 @@ const App = () => {
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
-			{!openModal && <Header createList={setOpenModal} />}
+			{!openModal && (
+				<>
+					<Header createList={setOpenModal} touristList={touristZoneSave}/>
+					<ListZone zoneSaved={touristZoneSave} />
+				</>
+			)}
 			{openModal && (
 				<Modal
 					setSearch={setSearchCity}
