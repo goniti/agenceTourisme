@@ -4,11 +4,12 @@ import { useState } from 'react'
 const Modal = ({
 	setSearch,
 	inputValue,
-	handleSearch,
 	autoSuggest,
-	handleSelect,
-	handleLimit,
 	zoneList,
+	handleSearch,
+	handleSelect,
+	handleSubmit,
+	handleLimit,
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
 	const suggestIsLoad = autoSuggest.length > 0
@@ -23,7 +24,7 @@ const Modal = ({
 			<p className="modal__title">Création d'une zone</p>
 			<p className="modal__subtitle">Nom de la zone</p>
 
-			<form>
+			<form onSubmit={handleSubmit}>
 				<div className="modal__form__suggest">
 					<label htmlFor="city" className="suggest__label">
 						Ville

@@ -9,11 +9,8 @@ const App = () => {
 	const [searchCity, setSearchCity] = useState('')
 	const [resultSuggest, setSuggest] = useState({})
 	const [selectedResults, setResults] = useState([])
-	const limitReached = (message) => {
-		if (selectedResults.length > 2) {
-			return [true, message]
-		}
-	}
+	const [touristZoneSave, setSave] = useState([])
+	console.log('save', touristZoneSave)
 
 	const onChangeSearch = () => {
 		fetch(
@@ -34,19 +31,33 @@ const App = () => {
 		setResults((oldResult) => [...oldResult, option])
 	}
 
+	const onSubmit = (event) => {
+		event.preventDefault()
+		localStorage.setItem('registeredZone', JSON.stringify(selectedResults))
+		setSave(JSON.parse(localStorage.getItem('registeredZone')))
+		setOpenModal(false)
+	}
+
+	const limitReached = (message) => {
+		if (selectedResults.length > 2) {
+			return [true, message]
+		}
+	}
+
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
 			{!openModal && <Header createList={setOpenModal} />}
 			{openModal && (
 				<Modal
-					autoSuggest={resultSuggest}
 					setSearch={setSearchCity}
 					inputValue={searchCity}
+					autoSuggest={resultSuggest}
+					zoneList={selectedResults}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}
-					zoneList={selectedResults}
 					handleLimit={limitReached('La liste des villes est compléter !')}
+					handleSubmit={onSubmit}
 				/>
 			)}
 		</div>
