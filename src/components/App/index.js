@@ -11,8 +11,7 @@ const App = () => {
 	const [resultSuggest, setSuggest] = useState({})
 	const [selectedResults, setResults] = useState([])
 	const [touristZoneSave, setSave] = useState([])
-	console.log('save', touristZoneSave.length)
-
+	
 	const onChangeSearch = () => {
 		fetch(
 			`https://geo.api.gouv.fr/communes?nom=${searchCity}&boost=population&limit=5`

@@ -1,5 +1,5 @@
-import './modal.scss'
 import { useState } from 'react'
+import './modal.scss'
 
 const Modal = ({
 	setSearch,
