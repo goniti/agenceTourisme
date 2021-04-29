@@ -11,6 +11,7 @@ const Modal = ({
 	handleSubmit,
 	handleLimit,
 	title,
+	error,
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
 	const suggestIsLoad = autoSuggest.length > 0
@@ -28,7 +29,7 @@ const Modal = ({
 			<form onSubmit={handleSubmit}>
 				<div className="modal__form__suggest">
 					<label htmlFor="city" className="suggest__label">
-						Ville
+						Ville <span className="modal__form__error">{error}</span>
 					</label>
 					{handleLimit ? (
 						<span>{`${handleLimit[1]}`}</span>

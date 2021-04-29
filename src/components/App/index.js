@@ -12,6 +12,7 @@ const App = () => {
 	const [selectedResults, setResults] = useState([])
 	const [touristZoneSave, setSave] = useState([])
 	const [titleModal, setTitleModal] = useState('')
+	const [errorMessage, setErrorMessage] = useState('')
 
 	const onChangeSearch = () => {
 		fetch(
@@ -34,9 +35,12 @@ const App = () => {
 
 	const onSubmit = (event) => {
 		event.preventDefault()
-		localStorage.setItem('registeredZone', JSON.stringify(selectedResults))
-		setSave(JSON.parse(localStorage.getItem('registeredZone')))
-		setOpenModal(false)
+		if (typeof selectedResults[0] === 'string') {
+			localStorage.setItem('registeredZone', JSON.stringify(selectedResults))
+			setSave(JSON.parse(localStorage.getItem('registeredZone')))
+			setOpenModal(false)
+		}
+		return setErrorMessage("choisir au minimum 1 ville")
 	}
 
 	const limitReached = (message) => {
@@ -45,7 +49,7 @@ const App = () => {
 		}
 	}
 	const changeTitleModal = (title) => {
-		return setTitleModal(title)
+		setTitleModal(title)
 	}
 
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
@@ -68,6 +72,7 @@ const App = () => {
 			{openModal && (
 				<Modal
 					title={titleModal}
+					error={errorMessage}
 					setSearch={setSearchCity}
 					inputValue={searchCity}
 					autoSuggest={resultSuggest}
