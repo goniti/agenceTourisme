@@ -42,7 +42,7 @@ const Modal = ({
 						<div className="suggest__validate">
 							<span>{`${handleLimit[1]}`}</span>
 							<div className="button--bordered">
-								Valider mes choix <GoTasklist size={16} />
+								Valider mes choix <span className="suggest__validate--icon"><GoTasklist size={16} /></span> 
 							</div>
 						</div>
 					) : (

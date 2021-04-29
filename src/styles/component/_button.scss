@@ -1,4 +1,7 @@
-.button--bordered{
+.button--bordered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     outline: none;
     border: none;
     cursor: pointer;

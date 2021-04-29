@@ -66,6 +66,9 @@
     &__validate {
         display: flex;
         align-items: center;
+        &--icon{
+            margin-left: .3rem;
+        }
     }
 
     &__city {
