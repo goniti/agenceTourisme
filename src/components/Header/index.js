@@ -1,4 +1,6 @@
 import './header.scss'
+import { GoPlusSmall } from 'react-icons/go'
+
 
 const Header = ({ handleTitleModal, touristList,showModal }) => {
 	const limitZone = 3 // the 0 is taken into account
@@ -21,7 +23,7 @@ const Header = ({ handleTitleModal, touristList,showModal }) => {
 				<>
 					<p>{`Vous pouvez encore enregistrer ${remainingZone} zone(s)`}</p>
 					<button className="button--bordered" onClick={showModal}>
-						Ajouter
+						Ajouter<GoPlusSmall size={16}/>
 					</button>
 				</>
 			)}

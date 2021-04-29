@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { GoTasklist, GoX } from 'react-icons/go'
+
 import './modal.scss'
 
 const Modal = ({
@@ -20,7 +22,7 @@ const Modal = ({
 		const random = Math.round(Math.random() * 1000)
 		return `https://picsum.photos/180/180?random=${random}`
 	}
-
+	console.log(zoneList)
 	return (
 		<div className="modal">
 			<p className="modal__title">{title}</p>
@@ -28,23 +30,36 @@ const Modal = ({
 
 			<form onSubmit={handleSubmit}>
 				<div className="modal__form__suggest">
-					<label htmlFor="city" className="suggest__label">
-						Ville <span className="modal__form__error">{error}</span>
-					</label>
+					<div className="suggest__city">
+						<label htmlFor="city" className="suggest__label">
+							Ville
+						</label>
+						<span className="tag tag__primary">
+							paris <GoX size={16} />
+						</span>
+					</div>
 					{handleLimit ? (
-						<span>{`${handleLimit[1]}`}</span>
+						<div className="suggest__validate">
+							<span>{`${handleLimit[1]}`}</span>
+							<div className="button--bordered">
+								Valider mes choix <GoTasklist size={16} />
+							</div>
+						</div>
 					) : (
-						<input
-							id="city"
-							className="suggest__input"
-							type="text"
-							value={inputValue}
-							onChange={(event) => {
-								handleSearch()
-								setSearch(event.target.value)
-								setOpenSuggest(true)
-							}}
-						/>
+						<div className="suggest__validate">
+							<input
+								id="city"
+								className="suggest__input"
+								type="text"
+								value={inputValue}
+								onChange={(event) => {
+									handleSearch()
+									setSearch(event.target.value)
+									setOpenSuggest(true)
+								}}
+							/>
+							<div className="button--bordered">Valider mes choix</div>
+						</div>
 					)}
 					{suggestIsLoad && openSuggest && (
 						<ul className="suggest__items">
@@ -64,22 +79,24 @@ const Modal = ({
 						</ul>
 					)}
 				</div>
-				{zoneList.map((municipality, index) => (
-					<div key={index} className="modal__picture__wrapper">
-						<span className="modal__picture__label">{municipality}</span>
-						<div className="modal__picture__content">
-							{imagesFake.map((image) => (
-								<img
-									key={image}
-									src={generateImage()}
-									className="modal__picture"
-									alt={image}
-								></img>
-							))}
+				{false &&
+					zoneList.map((municipality, index) => (
+						<div key={index} className="modal__picture__wrapper">
+							<span className="modal__picture__label">{municipality}</span>
+							<div className="modal__picture__content">
+								{imagesFake.map((image) => (
+									<img
+										key={image}
+										src={generateImage()}
+										className="modal__picture"
+										alt={image}
+									></img>
+								))}
+							</div>
 						</div>
-					</div>
-				))}
+					))}
 				<div className="modal__form__submit">
+					<span className="modal__form__error">{error}</span>
 					<input
 						className="button--bordered"
 						type="submit"

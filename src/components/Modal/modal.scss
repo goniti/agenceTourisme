@@ -20,6 +20,7 @@
         &__submit {
             display: flex;
             justify-content: flex-end;
+            align-items: center;
         }
 
 
@@ -29,16 +30,23 @@
             max-width: 50%;
         }
 
-        &__error{
+        &__error {
             color: $primary;
+            margin: 0 .5rem;
+
+            &::first-letter {
+                text-transform: capitalize;
+            }
         }
     }
 
     &__picture {
         margin-right: 2em;
+
         &__content {
             margin-bottom: 1rem
         }
+
         &__label {
             @extend .modal__subtitle;
         }
@@ -50,6 +58,19 @@
         @extend .modal__subtitle;
         margin-top: 2em;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+
+    }
+
+    &__validate {
+        display: flex;
+        align-items: center;
+    }
+
+    &__city {
+        display: flex;
+        align-items: baseline;
     }
 
     &__items {
