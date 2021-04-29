@@ -11,6 +11,7 @@ const Modal = ({
 	zoneList,
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
+	const suggestIsLoad = autoSuggest.length > 0
 	const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
 	const generateImage = () => {
 		const random = Math.round(Math.random() * 1000)
@@ -42,30 +43,28 @@ const Modal = ({
 							}}
 						/>
 					)}
-					{openSuggest && (
+					{suggestIsLoad && openSuggest && (
 						<ul className="suggest__items">
 							<span className="suggest__items__label">Suggestions</span>
 							{autoSuggest.map((suggest) => (
 								<li
-									key={suggest}
+									key={suggest.code}
 									className="suggest__item"
 									onClick={() => {
-										handleSelect(suggest)
+										handleSelect(suggest.nom)
 										setOpenSuggest(false)
 									}}
 								>
-									{suggest}
+									{suggest.nom}
 								</li>
 							))}
 						</ul>
 					)}
 				</div>
-				{zoneList.map((municipality) => (
-					<>
-						<span key={municipality} className="modal__picture__label">
-							{municipality}
-						</span>
-						<div className="modal__picture__group">
+				{zoneList.map((municipality, index) => (
+					<div key={index} className="modal__picture__wrapper">
+						<span className="modal__picture__label">{municipality}</span>
+						<div className="modal__picture__content">
 							{imagesFake.map((image) => (
 								<img
 									key={image}
@@ -75,7 +74,7 @@ const Modal = ({
 								></img>
 							))}
 						</div>
-					</>
+					</div>
 				))}
 				<div className="modal__form__submit">
 					<input

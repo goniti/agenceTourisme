@@ -7,7 +7,7 @@ const App = () => {
 	const [openModal, setOpenModal] = useState(false)
 	const [errorApiRequest, setError] = useState(false)
 	const [searchCity, setSearchCity] = useState('')
-	const [resultSuggest, setSuggest] = useState([])
+	const [resultSuggest, setSuggest] = useState({})
 	const [selectedResults, setResults] = useState([])
 	const limitReached = (message) => {
 		if (selectedResults.length > 2) {
@@ -21,7 +21,7 @@ const App = () => {
 		)
 			.then((response) => response.json())
 			.then((json) => {
-				setSuggest(json.map((results) => results.nom))
+				setSuggest(json.map((results) => results))
 				setError(false)
 			})
 			.catch(() => {
