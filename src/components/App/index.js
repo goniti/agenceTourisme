@@ -46,6 +46,10 @@ const App = () => {
 		setOpenModal(false)
 	}
 
+	const onRemove = (tagIndex) => {
+		console.log('indexOf tag', tagIndex)
+	}
+
 	const limitReached = (message) => {
 		if (selectedResults.length > 2) {
 			return [true, message]
@@ -80,6 +84,7 @@ const App = () => {
 					inputValue={valueCity}
 					autoSuggest={resultSuggest}
 					zoneList={selectedResults}
+					removeZone={onRemove}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}
 					handleLimit={limitReached('La liste des villes est compléter !')}

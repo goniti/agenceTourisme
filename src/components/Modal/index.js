@@ -8,6 +8,7 @@ const Modal = ({
 	inputValue,
 	autoSuggest,
 	zoneList,
+	removeZone,
 	handleSearch,
 	handleSelect,
 	handleSubmit,
@@ -22,7 +23,7 @@ const Modal = ({
 		const random = Math.round(Math.random() * 1000)
 		return `https://picsum.photos/180/180?random=${random}`
 	}
-	console.log(zoneList)
+	
 	return (
 		<div className="modal">
 			<p className="modal__title">{title}</p>
@@ -34,9 +35,11 @@ const Modal = ({
 						<label htmlFor="city" className="suggest__label">
 							Ville
 						</label>
-						<span className="tag tag__primary">
-							paris <GoX size={16} />
+						{zoneList.map((zone,index) => 
+						<span key={index} className="tag tag__primary" onClick={() => removeZone(index)}>
+							{zone} <GoX size={16} />
 						</span>
+						)}
 					</div>
 					{handleLimit ? (
 						<div className="suggest__validate">
