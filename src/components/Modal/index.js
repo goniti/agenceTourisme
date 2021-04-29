@@ -20,8 +20,9 @@ const Modal = ({
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
 	const suggestIsLoad = autoSuggest.length > 0
+	//console.log("touristImage",touristImage);
 
-	
+	console.log(touristImage)
 	return (
 		<div className="modal">
 			<p className="modal__title">{title}</p>
@@ -33,11 +34,15 @@ const Modal = ({
 						<label htmlFor="city" className="suggest__label">
 							Ville
 						</label>
-						{zoneList.map((zone,index) => 
-						<span key={index} className="tag tag__primary" onClick={() => removeZone(index)}>
-							{zone} <GoX size={16} />
-						</span>
-						)}
+						{zoneList.map((zone, index) => (
+							<span
+								key={index}
+								className="tag tag__primary"
+								onClick={() => removeZone(index)}
+							>
+								{zone} <GoX size={16} />
+							</span>
+						))}
 					</div>
 					{handleLimit ? (
 						<div className="suggest__validate">
@@ -62,7 +67,9 @@ const Modal = ({
 									setOpenSuggest(true)
 								}}
 							/>
-							<div className="button--bordered" onClick={handleValidate}>Valider mes choix</div>
+							<div className="button--bordered" onClick={handleValidate}>
+								Valider mes choix
+							</div>
 						</div>
 					)}
 					{suggestIsLoad && openSuggest && (
@@ -88,7 +95,7 @@ const Modal = ({
 						<div key={index} className="modal__picture__wrapper">
 							<span className="modal__picture__label">{municipality}</span>
 							<div className="modal__picture__content">
-								{touristImage.map((image,index) => (
+								{touristImage.map((image, index) => (
 									<img
 										key={index}
 										src={image.src}
@@ -101,11 +108,7 @@ const Modal = ({
 					))}
 				<div className="modal__form__submit">
 					<span className="modal__form__error">{error}</span>
-					<input
-						className="button--bordered"
-						type="submit"
-						value="Sauvegarder"
-					/>
+					<input className="button--bordered" type="submit" value="Sauvegarder" />
 				</div>
 			</form>
 		</div>

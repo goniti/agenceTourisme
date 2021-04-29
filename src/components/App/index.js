@@ -14,12 +14,9 @@ const App = () => {
 	const [titleModal, setTitleModal] = useState('')
 	const [errorMessage, setErrorMessage] = useState('')
 	const [imagesFake, setImagesFake] = useState([])
-	
 
 	const onChangeSearch = () => {
-		fetch(
-			`https://geo.api.gouv.fr/communes?nom=${searchData}&boost=population&limit=5`
-		)
+		fetch(`https://geo.api.gouv.fr/communes?nom=${searchData}&boost=population&limit=5`)
 			.then((response) => response.json())
 			.then((json) => {
 				setSuggest(json.map((results) => results))
@@ -59,19 +56,35 @@ const App = () => {
 			return [true, message]
 		}
 	}
+
 	const changeTitleModal = (title) => {
 		setTitleModal(title)
 	}
-	const onValidate = () => {
 
-		// const imagesFake = ['Zone1', 'Zone2', 'Zone3', 'Zone4', 'Zone5']
-		// const generateImage = () => {
-		// 	const random = Math.round(Math.random() * 1000)
-		// 	return `https://picsum.photos/180/180?random=${random}`
-		// }
-		 
-		console.log("validta");
-		console.log(selectedResults);
+	const generateImage = () => {
+		const numberOfImage = 5
+		let userSaving = {}
+		let srcImages = []
+		let images = []
+		for (let indexResults = 0; indexResults < selectedResults.length; indexResults++) {
+			for (let randomizeImage = 0; randomizeImage < numberOfImage; randomizeImage++) {
+				const random = Math.round(Math.random() * 1000)
+				srcImages.push({
+					src: `https://picsum.photos/180/180?random=${random}`,
+					alt: `Photo numero 0${[randomizeImage + 1]} ${selectedResults[indexResults]}`,
+				})
+			}
+			images.push(srcImages)
+			userSaving.data = images
+		}
+		return userSaving
+	}
+	const onValidate = () => {
+		if (selectedResults.length === 0) {
+			return
+		}
+
+		setImagesFake(generateImage)
 	}
 
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
