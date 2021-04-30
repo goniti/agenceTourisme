@@ -3,6 +3,7 @@ import Header from '../Header'
 import Modal from '../Modal'
 import ListZone from '../ListZone'
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 const App = () => {
 	const [openModal, setOpenModal] = useState(false)
@@ -10,7 +11,7 @@ const App = () => {
 	const [searchData, setSearchData] = useState('')
 	const [resultSuggest, setSuggest] = useState({})
 	const [selectedResults, setResults] = useState([])
-	const [touristZoneSave, setSave] = useState([])
+	const [touristZoneSave, setSave] = useState([]) //TODO refacto fusion touristZoneSave and imagesFake
 	const [titleModal, setTitleModal] = useState('')
 	const [errorMessage, setErrorMessage] = useState('')
 	const [imagesFake, setImagesFake] = useState([])
@@ -66,24 +67,30 @@ const App = () => {
 		let userSaving = {}
 		let srcImages = []
 		let images = []
-		for (let indexResults = 0; indexResults < selectedResults.length; indexResults++) {
-			for (let randomizeImage = 0; randomizeImage < numberOfImage; randomizeImage++) {
-				const random = Math.round(Math.random() * 1000)
-				srcImages.push({
-					src: `https://picsum.photos/180/180?random=${random}`,
-					alt: `Photo numero 0${[randomizeImage + 1]} ${selectedResults[indexResults]}`,
-				})
-			}
-			images.push(srcImages)
-			userSaving.data = images
+
+		for (let randomizeImage = 0; randomizeImage < numberOfImage; randomizeImage++) {
+			const random = Math.round(Math.random() * 1000)
+			srcImages.push({
+				id: uuidv4(),
+				src: `https://picsum.photos/180/180?random=${random}`,
+				alt: `Photo numero 0${[randomizeImage + 1]}`,
+			})
 		}
+
+		for (let indexResults = 0; indexResults < selectedResults.length; indexResults++) {
+			images.push({ municipality: `${selectedResults[indexResults]}`, pictures: srcImages })
+		}
+
+		//! error with objet fake data, it's duplicated
+		//console.log('images', images)
+		userSaving.data = images
 		return userSaving
 	}
+
 	const onValidate = () => {
 		if (selectedResults.length === 0) {
 			return
 		}
-
 		setImagesFake(generateImage)
 	}
 
@@ -113,7 +120,7 @@ const App = () => {
 					inputValue={searchData}
 					autoSuggest={resultSuggest}
 					zoneList={selectedResults}
-					touristImage={imagesFake}
+					zoneImage={imagesFake}
 					removeZone={onRemove}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}

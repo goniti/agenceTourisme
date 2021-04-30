@@ -8,7 +8,7 @@ const Modal = ({
 	inputValue,
 	autoSuggest,
 	zoneList,
-	touristImage,
+	zoneImage,
 	removeZone,
 	handleSearch,
 	handleSelect,
@@ -20,9 +20,8 @@ const Modal = ({
 }) => {
 	const [openSuggest, setOpenSuggest] = useState(false)
 	const suggestIsLoad = autoSuggest.length > 0
-	//console.log("touristImage",touristImage);
+	const imageHasData = zoneImage.length !== 0
 
-	console.log(touristImage)
 	return (
 		<div className="modal">
 			<p className="modal__title">{title}</p>
@@ -90,17 +89,17 @@ const Modal = ({
 						</ul>
 					)}
 				</div>
-				{false &&
-					zoneList.map((municipality, index) => (
+				{imageHasData &&
+					zoneImage.data.map((item, index) => (
 						<div key={index} className="modal__picture__wrapper">
-							<span className="modal__picture__label">{municipality}</span>
+							<span className="modal__picture__label">{item.municipality}</span>
 							<div className="modal__picture__content">
-								{touristImage.map((image, index) => (
+								{item.pictures.map((picture) => (
 									<img
-										key={index}
-										src={image.src}
+										key={picture.id}
+										src={picture.src}
 										className="modal__picture"
-										alt={image.name}
+										alt={picture.alt}
 									></img>
 								))}
 							</div>
