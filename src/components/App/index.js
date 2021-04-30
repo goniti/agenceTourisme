@@ -6,15 +6,17 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 const App = () => {
-	const [openModal, setOpenModal] = useState(false)
-	const [errorApiRequest, setError] = useState(false)
 	const [searchData, setSearchData] = useState('')
 	const [resultSuggest, setSuggest] = useState({})
-	const [selectedResults, setResults] = useState([])
-	const [touristZoneSave, setSave] = useState([]) //TODO refacto fusion touristZoneSave and imagesFake
+	const [selectedOption, setSelectedOption] = useState([])
+	const [cachingResult, setCachingResult] = useState([])
+	const [saveResult, setSave] = useState({})
+
+	const [openModal, setOpenModal] = useState(false)
 	const [titleModal, setTitleModal] = useState('')
+
+	const [errorApiRequest, setError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
-	const [imagesFake, setImagesFake] = useState([])
 
 	const onChangeSearch = () => {
 		fetch(`https://geo.api.gouv.fr/communes?nom=${searchData}&boost=population&limit=5`)
@@ -30,19 +32,20 @@ const App = () => {
 
 	const onSelect = (option) => {
 		//console.log("Filter",selectedResults.filter(item => item !== option));
-		setResults((oldResult) => [...oldResult, option])
+		setSelectedOption((oldOption) => [...oldOption, option])
 		setSearchData('')
 		setErrorMessage('')
 	}
 
 	const onSubmit = (event) => {
 		event.preventDefault()
-		if (typeof selectedResults[0] !== 'string') {
-			return setErrorMessage('choisir au minimum 1 ville')
+		if (cachingResult.length === 0) {
+			return setErrorMessage('Valider au minimum une ville avant de sauvegarder')
 		}
 
-		localStorage.setItem('registeredZone', JSON.stringify(selectedResults))
+		localStorage.setItem('registeredZone', JSON.stringify(cachingResult))
 		setSave(JSON.parse(localStorage.getItem('registeredZone')))
+		setCachingResult([])
 		setOpenModal(false)
 	}
 
@@ -53,7 +56,7 @@ const App = () => {
 	}
 
 	const limitReached = (message) => {
-		if (selectedResults.length > 2) {
+		if (selectedOption.length > 2) {
 			return [true, message]
 		}
 	}
@@ -62,36 +65,36 @@ const App = () => {
 		setTitleModal(title)
 	}
 
-	const generateImage = () => {
+	const generateData = () => {
 		const numberOfImage = 5
-		let userSaving = {}
+		let cityData = {}
 		let srcImages = []
 		let images = []
 
-		for (let randomizeImage = 0; randomizeImage < numberOfImage; randomizeImage++) {
+		for (let indexImage = 0; indexImage < numberOfImage; indexImage++) {
 			const random = Math.round(Math.random() * 1000)
 			srcImages.push({
 				id: uuidv4(),
 				src: `https://picsum.photos/180/180?random=${random}`,
-				alt: `Photo numero 0${[randomizeImage + 1]}`,
+				alt: `Photo numero 0${[indexImage + 1]}`,
 			})
 		}
 
-		for (let indexResults = 0; indexResults < selectedResults.length; indexResults++) {
-			images.push({ municipality: `${selectedResults[indexResults]}`, pictures: srcImages })
+		for (let indexData = 0; indexData < selectedOption.length; indexData++) {
+			images.push({ municipality: `${selectedOption[indexData]}`, pictures: srcImages })
 		}
 
 		//! error with objet fake data, it's duplicated
 		//console.log('images', images)
-		userSaving.data = images
-		return userSaving
+		cityData.data = images
+		return cityData
 	}
 
 	const onValidate = () => {
-		if (selectedResults.length === 0) {
+		if (selectedOption.length === 0) {
 			return
 		}
-		setImagesFake(generateImage)
+		setCachingResult(generateData)
 	}
 
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
@@ -101,13 +104,13 @@ const App = () => {
 				<>
 					<Header
 						showModal={setOpenModal}
-						touristList={touristZoneSave}
+						touristPlaces={saveResult}
 						handleTitleModal={changeTitleModal}
 					/>
 					<ListZone
 						handleTitleModal={changeTitleModal}
 						editZone={setOpenModal}
-						zoneSaved={touristZoneSave}
+						listPlaces={saveResult}
 						removeZone={onRemove}
 					/>
 				</>
@@ -119,8 +122,8 @@ const App = () => {
 					setSearch={setSearchData}
 					inputValue={searchData}
 					autoSuggest={resultSuggest}
-					zoneList={selectedResults}
-					zoneImage={imagesFake}
+					zoneList={selectedOption}
+					zoneImage={cachingResult}
 					removeZone={onRemove}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}

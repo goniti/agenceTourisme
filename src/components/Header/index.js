@@ -1,19 +1,21 @@
 import './header.scss'
 import { GoPlusSmall } from 'react-icons/go'
 
-const Header = ({ handleTitleModal, touristList, showModal }) => {
-	const limitZone = 3 // the 0 is taken into account
-	const numberOfzone = touristList.length
-	const remainingZone = limitZone - numberOfzone
-	const noZone = numberOfzone === 0
-	const canStillSave = numberOfzone > 0 && numberOfzone < limitZone
+const Header = ({ handleTitleModal, touristPlaces, showModal }) => {
+	const noPlaces = Object.entries(touristPlaces).length === 0
+	let canStillSave = false
+	let remainingZone = 0
+
+	if (!noPlaces) {
+		const countZone = Object.entries(touristPlaces).length
+		const limitZone = 3
+		canStillSave = touristPlaces.data.length < limitZone
+		remainingZone = limitZone - countZone
+	}
 
 	return (
-		<header
-			className="App__header"
-			onClick={() => handleTitleModal("Création d'une zone")}
-		>
-			{noZone && (
+		<header className="App__header" onClick={() => handleTitleModal("Création d'une zone")}>
+			{noPlaces && (
 				<>
 					<p className="App__header__text">Aucune zone enregistrée</p>
 					<button onClick={showModal} className="button--bordered">
