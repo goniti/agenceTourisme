@@ -37,9 +37,12 @@ const Modal = ({
 							<span
 								key={index}
 								className="tag tag__primary"
-								onClick={() => removeZone(index)}
+								onClick={(event) => removeZone(event, index)}
 							>
-								{zone} <GoX size={16} />
+								{zone}{' '}
+								<i className="tag--icon-close" id={index}>
+									<GoX size={16} />
+								</i>
 							</span>
 						))}
 					</div>

@@ -10,6 +10,7 @@ const App = () => {
 	const [resultSuggest, setSuggest] = useState({})
 	const [selectedOption, setSelectedOption] = useState([])
 	const [cachingResult, setCachingResult] = useState([])
+
 	const [saveResult, setSave] = useState({})
 
 	const [openModal, setOpenModal] = useState(false)
@@ -17,6 +18,8 @@ const App = () => {
 
 	const [errorApiRequest, setError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
+
+	console.log(saveResult)
 
 	const onChangeSearch = () => {
 		fetch(`https://geo.api.gouv.fr/communes?nom=${searchData}&boost=population&limit=5`)
@@ -31,7 +34,11 @@ const App = () => {
 	}
 
 	const onSelect = (option) => {
-		//console.log("Filter",selectedResults.filter(item => item !== option));
+		const forbidsDuplication = selectedOption.includes(option)
+		if (forbidsDuplication) {
+			return
+		}
+
 		setSelectedOption((oldOption) => [...oldOption, option])
 		setSearchData('')
 		setErrorMessage('')
@@ -44,16 +51,52 @@ const App = () => {
 		}
 
 		localStorage.setItem('registeredZone', JSON.stringify(cachingResult))
+
 		setSave(JSON.parse(localStorage.getItem('registeredZone')))
+
 		setCachingResult([])
+
 		setOpenModal(false)
 	}
 
-	const onRemove = (id) => {
-		console.log('index =', id)
+	const onRemoveResultSaved = (id) => {
+		// Todo Deleting with confirmation
+		const currentTarget = saveResult.data[id].id
+		console.log("l'id target", id)
+		console.log('saveResult.data', currentTarget) // saveResult.data Array [ {…}, {…} ]
 
-		// Todo Deleting an area with confirmation
+		console.log(saveResult.data[id].filter((item) => item.id !== id))
+
+		// Uncaught TypeError: saveResult.filter is not a function
+
+		// saveResult.map((item) => item )
+		// [{ id: 0, municipality: "Angers", pictures: (5) […] }]
+
+		// console.log(
+		// 	'monfiltre',
+		// 	saveResult.filter((item) => item.data[id].id !== id)
+		// )
+		//setSave(saveResult.filter((item) => item.data.id !== id))
+
+		//console.log(saveResult.filter((currentItem) => currentItem.data.id !== id))
+
+		// const deleteItem = id => {
+		// 	setItems(prevItems => {
+		// 	  return prevItems.filter(item => item.id !== id);
+		// 	});
+		//   };
+		//const item = saveResult.data[target].id
+		//console.log(item)
+		//saveResult.splice((element) => element.data[target].id === id, 1)
+		//console.log(saveResult)
+		// const removed = saveResult.filter((item) => {
+		// 	return item.id !== id
+		// })
+		// setSave((oldItem) => [...oldItem, removed])
+
+		//console.log(removed)
 	}
+	const onRemoveTag = (target, id) => {}
 
 	const limitReached = (message) => {
 		if (selectedOption.length > 2) {
@@ -81,7 +124,11 @@ const App = () => {
 		}
 
 		for (let indexData = 0; indexData < selectedOption.length; indexData++) {
-			images.push({ municipality: `${selectedOption[indexData]}`, pictures: srcImages })
+			images.push({
+				id: indexData,
+				municipality: `${selectedOption[indexData]}`,
+				pictures: srcImages,
+			})
 		}
 
 		//! error with objet fake data, it's duplicated
@@ -111,7 +158,7 @@ const App = () => {
 						handleTitleModal={changeTitleModal}
 						editZone={setOpenModal}
 						listPlaces={saveResult}
-						removeZone={onRemove}
+						removeZone={onRemoveResultSaved}
 					/>
 				</>
 			)}
@@ -124,7 +171,7 @@ const App = () => {
 					autoSuggest={resultSuggest}
 					zoneList={selectedOption}
 					zoneImage={cachingResult}
-					removeZone={onRemove}
+					removeZone={onRemoveTag}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}
 					handleLimit={limitReached('La liste des villes est compléter !')}

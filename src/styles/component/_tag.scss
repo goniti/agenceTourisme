@@ -7,10 +7,17 @@
     margin: 0 .5rem;
     display: flex;
     align-items: center;
-    cursor: pointer;
 
     &__primary {
         background-color: $primary;
         color: $lightText;
+    }
+
+    &--icon-close {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0.2rem;
+        cursor: pointer;
     }
 }
