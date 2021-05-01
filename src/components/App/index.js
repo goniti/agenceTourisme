@@ -47,22 +47,15 @@ const App = () => {
 		if (cachingResult.length === 0) {
 			return setErrorMessage('Valider au minimum une ville avant de sauvegarder')
 		}
-
-		localStorage.setItem('registeredZone', JSON.stringify(cachingResult))
-
-		setSave(JSON.parse(localStorage.getItem('registeredZone')))
-
+		setSave(cachingResult)
 		setCachingResult([])
-
 		setOpenModal(false)
 	}
 
 	const onRemoveResultSaved = (id) => {
-		//console.log(saveResult.filter((item) => item.data.id !== id))
-		//console.log(saveResult.data.filter((item) => item.id !== id))
-		setSave(saveResult.data.filter((item) => item.id !== id))
+		setSave(saveResult.data.filter((item) => item.id === id))
 	}
-	const onRemoveTag = (target, id) => {}
+	const onRemoveTag = () => {}
 
 	const limitReached = (message) => {
 		if (selectedOption.length > 2) {
