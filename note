@@ -1,0 +1,61 @@
+
+//sauvegarder dans le localStorage
+localStorage.setItem("registeredZone", JSON.stringify(dataCreateZone));
+// Reccuperé l'objet sauvegarder du localStorage
+setDataCreateZone(JSON.parse(localStorage.getItem("registeredZone")));
+
+Ancienne données :
+
+ListZone.propTypes = {
+
+
+
+  listPlaces: PropTypes.shape({
+
+    data: PropTypes.arrayOf(
+
+
+      PropTypes.shape({
+        municipality: PropTypes.string,
+        pictures: PropTypes.arrayOf(
+          PropTypes.shape({
+            alt: PropTypes.string,
+            id: PropTypes.string,
+            src: PropTypes.string,
+          }).isRequired
+        ),
+      })
+
+
+    ),
+  }),
+ 
+};
+
+
+zoneList{   
+
+ name: {"municipality",pictures:[{},{},{}]}
+
+ name: {"municipality",pictures:[{},{},{}]}
+
+ name: {"municipality",pictures:[{},{},{}]}
+
+ name: {"municipality",pictures:[{},{},{}]}
+
+}
+
+const zonelist = {
+	name1: {
+		municipality: "nomDuPatlin",
+		pictures:[{id:13},{id:14},{id:15}]
+	},
+	name2: {
+		municipality: "nomDuPatlin",
+		pictures:[{id:13},{id:14},{id:15}]
+	},
+	name3: {
+		municipality: "nomDuPatlin",
+		pictures:[{id:13},{id:14},{id:15}]
+	}
+}

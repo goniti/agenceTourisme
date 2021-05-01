@@ -6,67 +6,28 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 const App = () => {
-	const [searchData, setSearchData] = useState('')
-	const [resultSuggest, setSuggest] = useState({})
-	const [cachingResult, setCachingResult] = useState([])
-
+	const [searchSuggest, setSearchSuggest] = useState('')
+	const [resultSuggest, setResultSuggest] = useState({})
+	const [errorApiRequest, setError] = useState(false)
+	// Hook for Modal
 	const [selectedOption, setSelectedOption] = useState([])
-	const [saveResult, setSave] = useState({})
-
 	const [openModal, setOpenModal] = useState(false)
 	const [titleModal, setTitleModal] = useState('')
-
-	const [errorApiRequest, setError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
+	const [dataCreateZone, setDataCreateZone] = useState({})
 
 	const onChangeSearch = () => {
-		fetch(`https://geo.api.gouv.fr/communes?nom=${searchData}&boost=population&limit=5`)
+		fetch(`https://geo.api.gouv.fr/communes?nom=${searchSuggest}&boost=population&limit=5`)
 			.then((response) => response.json())
 			.then((json) => {
-				setSuggest(json.map((results) => results))
+				setResultSuggest(json.map((results) => results))
 				setError(false)
 			})
 			.catch(() => {
 				setError(true)
 			})
 	}
-
-	const onSelect = (option) => {
-		const forbidsDuplication = selectedOption.includes(option)
-		if (forbidsDuplication) {
-			return
-		}
-
-		setSelectedOption((oldOption) => [...oldOption, option])
-		setSearchData('')
-		setErrorMessage('')
-	}
-
-	const onSubmit = (event) => {
-		event.preventDefault()
-		if (cachingResult.length === 0) {
-			return setErrorMessage('Valider au minimum une ville avant de sauvegarder')
-		}
-		setSave(cachingResult)
-		setCachingResult([])
-		setOpenModal(false)
-	}
-
-	const onRemoveResultSaved = (id) => {
-		setSave(saveResult.data.filter((item) => item.id === id))
-	}
-	const onRemoveTag = () => {}
-
-	const limitReached = (message) => {
-		if (selectedOption.length > 2) {
-			return [true, message]
-		}
-	}
-
-	const changeTitleModal = (title) => {
-		setTitleModal(title)
-	}
-
+	// Handle Data
 	const generateData = () => {
 		const numberOfImage = 5
 		let cityData = {}
@@ -96,46 +57,54 @@ const App = () => {
 		return cityData
 	}
 
-	const onValidate = () => {
-		if (selectedOption.length === 0) {
+	const isThereAnyData = () => {
+		return Object.entries(dataCreateZone).length !== 0
+	}
+
+	// Handle modal
+	const showTitleModal = (title) => {
+		setTitleModal(title)
+	}
+	const onSelect = (option) => {
+		const forbidsDuplication = selectedOption.includes(option)
+		if (forbidsDuplication) {
 			return
 		}
-		setCachingResult(generateData)
+		setSelectedOption((oldOption) => [...oldOption, option])
+		setSearchSuggest('')
+		setErrorMessage('')
+
+		setDataCreateZone(generateData)
+	}
+
+	const onSubmit = (event) => {
+		event.preventDefault()
+		if (dataCreateZone.length === 0) {
+			return setErrorMessage('Choisir au minimum une ville avant de sauvegarder')
+		}
+
+		setOpenModal(false)
 	}
 
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
 			{!openModal && (
-				<>
-					<Header
-						showModal={setOpenModal}
-						touristPlaces={saveResult}
-						handleTitleModal={changeTitleModal}
-					/>
-					<ListZone
-						handleTitleModal={changeTitleModal}
-						editZone={setOpenModal}
-						listPlaces={saveResult}
-						removeZone={onRemoveResultSaved}
-					/>
-				</>
+				<Header
+					hasData={isThereAnyData()}
+					showModal={setOpenModal}
+					titleModal={showTitleModal}
+				/>
 			)}
 			{openModal && (
 				<Modal
-					title={titleModal}
-					error={errorMessage}
-					setSearch={setSearchData}
-					inputValue={searchData}
-					autoSuggest={resultSuggest}
-					zoneList={selectedOption}
-					zoneImage={cachingResult}
-					removeZone={onRemoveTag}
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}
-					handleLimit={limitReached('La liste des villes est compléter !')}
 					handleSubmit={onSubmit}
-					handleValidate={onValidate}
+					autoSuggest={resultSuggest}
+					zoneData={dataCreateZone}
+					title={titleModal}
+					error={errorMessage}
 				/>
 			)}
 		</div>

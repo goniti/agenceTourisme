@@ -1,14 +1,11 @@
 import './header.scss'
-import PropTypes from 'prop-types'
 import { GoPlusSmall } from 'react-icons/go'
+import PropTypes from 'prop-types'
 
-const Header = ({ handleTitleModal, touristPlaces, showModal }) => {
-	console.log(touristPlaces)
-	const noPlaces = Object.entries(touristPlaces).length === 0
-
+const Header = ({ hasData, showModal, titleModal }) => {
 	return (
-		<header className="App__header" onClick={() => handleTitleModal("Création d'une zone")}>
-			{noPlaces && <p className="App__header__text">Aucune zone enregistrée</p>}
+		<header className="App__header" onClick={() => titleModal("Création d'une zone")}>
+			{!hasData && <p className="App__header__text">Aucune zone enregistrée</p>}
 			<button onClick={showModal} className="button--bordered">
 				Ajouter une zone <GoPlusSmall size={16} />
 			</button>
@@ -17,20 +14,9 @@ const Header = ({ handleTitleModal, touristPlaces, showModal }) => {
 }
 
 Header.propTypes = {
-	touristPlaces: PropTypes.shape({
-		data: PropTypes.arrayOf(
-			PropTypes.shape({
-				municipality: PropTypes.string,
-				pictures: PropTypes.arrayOf(
-					PropTypes.shape({
-						alt: PropTypes.string,
-						id: PropTypes.string,
-						src: PropTypes.string,
-					}).isRequired
-				),
-			})
-		),
-	}),
+	hasData: PropTypes.bool.isRequired,
+	showModal: PropTypes.func.isRequired,
+	titleModal: PropTypes.func.isRequired,
 }
 
 export default Header
