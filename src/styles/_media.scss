@@ -1,0 +1,17 @@
+
+@media screen and (min-width: 800px) {
+    .modal {
+        margin: 1em;
+        padding: 1em 0.5em 2em 3em;
+
+        &__form {
+            &__suggest {
+                max-width: 50%;
+            }
+        }
+    }
+    .App__header {
+        justify-content: center;
+        flex-direction: row !important;
+    }
+}

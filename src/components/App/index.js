@@ -1,20 +1,22 @@
-import './App.scss'
-import Header from '../Header'
-import Modal from '../Modal'
-import ListZone from '../ListZone'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import Header from '../Header'
+import Modal from '../Modal'
+//import ListZone from '../ListZone'
+import './App.scss'
 
 const App = () => {
+	//* Hook data management
+	const [dataCreateZone, setDataCreateZone] = useState({})
+	//* Hook for an auto suggest system
 	const [searchSuggest, setSearchSuggest] = useState('')
 	const [resultSuggest, setResultSuggest] = useState({})
 	const [errorApiRequest, setError] = useState(false)
-	// Hook for Modal
+	//* Hook for Modal
 	const [selectedOption, setSelectedOption] = useState([])
 	const [openModal, setOpenModal] = useState(false)
 	const [titleModal, setTitleModal] = useState('')
 	const [errorMessage, setErrorMessage] = useState('')
-	const [dataCreateZone, setDataCreateZone] = useState({})
 
 	const onChangeSearch = () => {
 		fetch(`https://geo.api.gouv.fr/communes?nom=${searchSuggest}&boost=population&limit=5`)
@@ -86,6 +88,12 @@ const App = () => {
 		setOpenModal(false)
 	}
 
+	const limitReached = () => {
+		if (selectedOption.length > 2) {
+			return [true]
+		}
+	}
+
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
@@ -101,10 +109,15 @@ const App = () => {
 					handleSearch={onChangeSearch}
 					handleSelect={onSelect}
 					handleSubmit={onSubmit}
+					handleLimit={limitReached()}
 					autoSuggest={resultSuggest}
 					zoneData={dataCreateZone}
+					hasData={isThereAnyData()}
+					cities={selectedOption}
 					title={titleModal}
 					error={errorMessage}
+					inputValue={searchSuggest}
+					onChangeValue={setSearchSuggest}
 				/>
 			)}
 		</div>

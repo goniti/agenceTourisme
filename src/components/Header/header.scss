@@ -2,10 +2,10 @@
 
 .App__header {
     display: flex;
+    margin: 2rem;
+    flex-direction: column-reverse;
     align-items: center;
-    justify-content: center;
-    margin-top: 2rem;
-
+    
     &__text {
         margin-right: 1em;
         font-size: 1.2rem;
