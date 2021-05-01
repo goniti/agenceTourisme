@@ -8,9 +8,9 @@ import { v4 as uuidv4 } from 'uuid'
 const App = () => {
 	const [searchData, setSearchData] = useState('')
 	const [resultSuggest, setSuggest] = useState({})
-	const [selectedOption, setSelectedOption] = useState([])
 	const [cachingResult, setCachingResult] = useState([])
 
+	const [selectedOption, setSelectedOption] = useState([])
 	const [saveResult, setSave] = useState({})
 
 	const [openModal, setOpenModal] = useState(false)
@@ -18,8 +18,6 @@ const App = () => {
 
 	const [errorApiRequest, setError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
-
-	console.log(saveResult)
 
 	const onChangeSearch = () => {
 		fetch(`https://geo.api.gouv.fr/communes?nom=${searchData}&boost=population&limit=5`)
@@ -60,41 +58,9 @@ const App = () => {
 	}
 
 	const onRemoveResultSaved = (id) => {
-		// Todo Deleting with confirmation
-		const currentTarget = saveResult.data[id].id
-		console.log("l'id target", id)
-		console.log('saveResult.data', currentTarget) // saveResult.data Array [ {…}, {…} ]
-
-		console.log(saveResult.data[id].filter((item) => item.id !== id))
-
-		// Uncaught TypeError: saveResult.filter is not a function
-
-		// saveResult.map((item) => item )
-		// [{ id: 0, municipality: "Angers", pictures: (5) […] }]
-
-		// console.log(
-		// 	'monfiltre',
-		// 	saveResult.filter((item) => item.data[id].id !== id)
-		// )
-		//setSave(saveResult.filter((item) => item.data.id !== id))
-
-		//console.log(saveResult.filter((currentItem) => currentItem.data.id !== id))
-
-		// const deleteItem = id => {
-		// 	setItems(prevItems => {
-		// 	  return prevItems.filter(item => item.id !== id);
-		// 	});
-		//   };
-		//const item = saveResult.data[target].id
-		//console.log(item)
-		//saveResult.splice((element) => element.data[target].id === id, 1)
-		//console.log(saveResult)
-		// const removed = saveResult.filter((item) => {
-		// 	return item.id !== id
-		// })
-		// setSave((oldItem) => [...oldItem, removed])
-
-		//console.log(removed)
+		//console.log(saveResult.filter((item) => item.data.id !== id))
+		//console.log(saveResult.data.filter((item) => item.id !== id))
+		setSave(saveResult.data.filter((item) => item.id !== id))
 	}
 	const onRemoveTag = (target, id) => {}
 
@@ -113,17 +79,19 @@ const App = () => {
 		let cityData = {}
 		let srcImages = []
 		let images = []
-
-		for (let indexImage = 0; indexImage < numberOfImage; indexImage++) {
-			const random = Math.round(Math.random() * 1000)
-			srcImages.push({
-				id: uuidv4(),
-				src: `https://picsum.photos/180/180?random=${random}`,
-				alt: `Photo numero 0${[indexImage + 1]}`,
-			})
-		}
+		let count = 0
 
 		for (let indexData = 0; indexData < selectedOption.length; indexData++) {
+			srcImages = []
+			for (let indexImage = 0; indexImage < numberOfImage; indexImage++) {
+				count++
+				srcImages.push({
+					id: uuidv4(),
+					src: `https://picsum.photos/180/180?random=${count}`,
+					alt: `Photo numero 0${[indexImage + 1]}`,
+				})
+			}
+
 			images.push({
 				id: indexData,
 				municipality: `${selectedOption[indexData]}`,
@@ -131,8 +99,6 @@ const App = () => {
 			})
 		}
 
-		//! error with objet fake data, it's duplicated
-		//console.log('images', images)
 		cityData.data = images
 		return cityData
 	}
