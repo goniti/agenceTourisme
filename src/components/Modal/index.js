@@ -8,6 +8,8 @@ const Modal = ({
 	handleSubmit,
 	handleLimit,
 	handleSelect,
+	handleRemove,
+	zoneId,
 	cities,
 	inputValue,
 	onChangeValue,
@@ -31,10 +33,14 @@ const Modal = ({
 						<label htmlFor="city" className="suggest__label">
 							Ville
 						</label>
-						{cities.map((city, index) => (
-							<span key={index} className="tag tag__primary">
-								{city}
-								<i className="tag--icon-close" id={index}>
+						{cities.map((city) => (
+							<span key={city.id} className="tag tag__primary">
+								{city.name}
+								<i
+									className="tag--icon-close"
+									id={city.id}
+									onClick={() => handleRemove(city.name, zoneId)}
+								>
 									<GoX size={16} />
 								</i>
 							</span>
@@ -67,7 +73,7 @@ const Modal = ({
 									key={suggest.code}
 									className="suggest__item"
 									onClick={() => {
-										handleSelect(suggest.nom)
+										handleSelect(suggest.nom, zoneId, zoneData)
 										setOpenSuggest(false)
 									}}
 								>
@@ -77,21 +83,19 @@ const Modal = ({
 						</ul>
 					)}
 				</div>
-				{false &&
-					zoneData.data.map((item) => (
-						<div key={item.id} className="modal__picture__wrapper">
-							{item.locations.map((location) => (
-								<div key={location.id}>
-									<span className="modal__picture__label">{location.municipality}</span>
+				{zoneData &&
+					zoneData.municipalities.map((municipality) => (
+						<div key={municipality.id} className="modal__picture__wrapper">
+							<p className="modal__picture__label">{municipality.municipality}</p>
+
+							{municipality.pictures.map((picture) => (
+								<div key={picture.id}>
 									<div className="modal__picture__content">
-										{location.pictures.map((picture) => (
-											<img
-												key={picture.id}
-												src={picture.src}
-												className="modal__picture"
-												alt={picture.alt}
-											></img>
-										))}
+										<img
+											src={picture.src}
+											alt={picture.alt}
+											className="modal__picture"
+										></img>
 									</div>
 								</div>
 							))}
