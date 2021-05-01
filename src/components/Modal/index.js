@@ -5,15 +5,15 @@ import './modal.scss'
 
 const Modal = ({
 	handleSearch,
-	handleSelect,
 	handleSubmit,
 	handleLimit,
-	autoSuggest,
+	handleSelect,
+	cities,
 	inputValue,
 	onChangeValue,
+	autoSuggest,
 	zoneData,
 	hasData,
-	cities,
 	title,
 	error,
 }) => {
@@ -31,15 +31,14 @@ const Modal = ({
 						<label htmlFor="city" className="suggest__label">
 							Ville
 						</label>
-						{hasData &&
-							cities.map((city, index) => (
-								<span key={index} className="tag tag__primary">
-									{city}{' '}
-									<i className="tag--icon-close" id={index}>
-										<GoX size={16} />
-									</i>
-								</span>
-							))}
+						{cities.map((city, index) => (
+							<span key={index} className="tag tag__primary">
+								{city}
+								<i className="tag--icon-close" id={index}>
+									<GoX size={16} />
+								</i>
+							</span>
+						))}
 					</div>
 					{handleLimit ? (
 						<div className="suggest__validate">
@@ -78,7 +77,7 @@ const Modal = ({
 						</ul>
 					)}
 				</div>
-				{hasData &&
+				{false &&
 					zoneData.data.map((item) => (
 						<div key={item.id} className="modal__picture__wrapper">
 							{item.locations.map((location) => (

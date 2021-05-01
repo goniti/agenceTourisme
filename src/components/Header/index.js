@@ -3,6 +3,7 @@ import { GoPlusSmall } from 'react-icons/go'
 import PropTypes from 'prop-types'
 
 const Header = ({ hasData, showModal, titleModal }) => {
+	console.log(hasData)
 	return (
 		<header className="App__header" onClick={() => titleModal("Création d'une zone")}>
 			{!hasData && <p className="App__header__text">Aucune zone enregistrée</p>}

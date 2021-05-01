@@ -37,7 +37,7 @@ const App = () => {
 		let images = []
 		let count = 0
 
-		for (let indexData = 0; indexData < selectedOption.length; indexData++) {
+		for (let indexData = 0; indexData < selectedOption.length + 1; indexData++) {
 			srcImages = []
 			for (let indexImage = 0; indexImage < numberOfImage; indexImage++) {
 				count++
@@ -54,14 +54,10 @@ const App = () => {
 				pictures: srcImages,
 			})
 		}
-
 		cityData.data = images
 		return cityData
 	}
-
-	const isThereAnyData = () => {
-		return Object.entries(dataCreateZone).length !== 0
-	}
+	//TODO Creation de l'objet ci dessu
 
 	// Handle modal
 	const showTitleModal = (title) => {
@@ -75,7 +71,6 @@ const App = () => {
 		setSelectedOption((oldOption) => [...oldOption, option])
 		setSearchSuggest('')
 		setErrorMessage('')
-
 		setDataCreateZone(generateData)
 	}
 
@@ -94,6 +89,10 @@ const App = () => {
 		}
 	}
 
+	const isThereAnyData = () => {
+		return Object.entries(dataCreateZone).length !== 0
+	}
+
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
@@ -107,17 +106,17 @@ const App = () => {
 			{openModal && (
 				<Modal
 					handleSearch={onChangeSearch}
-					handleSelect={onSelect}
 					handleSubmit={onSubmit}
 					handleLimit={limitReached()}
+					handleSelect={onSelect}
+					cities={selectedOption}
+					inputValue={searchSuggest}
+					onChangeValue={setSearchSuggest}
 					autoSuggest={resultSuggest}
 					zoneData={dataCreateZone}
 					hasData={isThereAnyData()}
-					cities={selectedOption}
 					title={titleModal}
 					error={errorMessage}
-					inputValue={searchSuggest}
-					onChangeValue={setSearchSuggest}
 				/>
 			)}
 		</div>
