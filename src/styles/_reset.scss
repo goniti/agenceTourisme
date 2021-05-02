@@ -133,3 +133,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+input {
+	padding: .5rem;
+	border-radius: 5px;
+	outline: none;
+	border: 1px solid #ccc;
+}
