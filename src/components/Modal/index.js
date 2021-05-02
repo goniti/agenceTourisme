@@ -23,7 +23,7 @@ const Modal = ({
   error,
 }) => {
   const [openSuggest, setOpenSuggest] = useState(false)
-  const userWrite = autoSuggest.length >= 0
+  const userWrite = inputSuggestValue !== ''
 
   return (
     <div className="modal">
@@ -57,21 +57,23 @@ const Modal = ({
             <div className="suggest__validate">La limite de ville pour cette zone est atteinte.</div>
           ) : (
             <div className="suggest__validate">
-              <i
-                onClick={() => {
-                  setOpenSuggest(false)
-                  onChangeValue('')
-                }}
-                className="suggest__input__icon"
-              >
-                <GoX size={16} />
-              </i>
+              {userWrite && (
+                <i
+                  onClick={() => {
+                    setOpenSuggest(false)
+                    onChangeValue('')
+                  }}
+                  className="suggest__input__icon"
+                >
+                  <GoX size={16} />
+                </i>
+              )}
               <input
                 id="city"
                 className="suggest__input"
                 type="text"
                 value={inputSuggestValue}
-                onKeyUp={(event) => {
+                onChange={(event) => {
                   onChangeValue(event.target.value)
                   setOpenSuggest(true)
                   handleSuggest()
