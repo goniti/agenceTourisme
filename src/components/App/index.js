@@ -21,7 +21,7 @@ const App = () => {
   const [zoneId, setZoneId] = useState(false)
   const [titleModal, setTitleModal] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  //*Hook for Confirm
+  //* Hook for Confirm
   const [openConfirm, setOpenConfirm] = useState(false)
 
   const getSuggest = (value) => {
@@ -161,16 +161,10 @@ const App = () => {
 
   const onSubmit = (event) => {
     event.preventDefault()
-    const zone = dataZones.find((zone) => zone.id === zoneId)
-
-    if (zone && zone.municipalities.length === 0) {
-      return setErrorMessage('Choisir au minimum une ville avant de sauvegarder')
-    } else if (selectedOption.length !== 0 && !zoneRename) {
+    if (selectedOption.length !== 0 && !zoneRename) {
       return setErrorMessage('Saisissez un nom de zone')
     }
-
     setOpenModal(false)
-    console.log(dataZones)
   }
 
   if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
