@@ -1,43 +1,33 @@
 @import '../../styles/vars';
 
 .listzone {
-
-    &__wrapper {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        flex-direction: column;
-        height: 40vh;
-    }
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
 
     &__item {
         display: flex;
         align-items: center;
-    }
+        padding: 1em;
 
-    &__header {
-        @extend .listzone__item;
-        font-weight: 700;
-    }
+        &__icon {
+            display: flex;
+            margin: 0 .35rem;
+            transition: color .3s ease-in-out;
 
-    &__content {
-        font-size: $largeText;
-        height: 20vh;
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-    }
+            &:hover {
+                color: $primary;
+                cursor: pointer;
+            }
+        }
 
+        &__name {
 
-
-    &__icon {
-        display: flex;
-        margin: 0 .35rem;
-        transition: color .3s ease-in-out;
-
-        &:hover {
-            color: $primary;
-            cursor: pointer;
+            &:hover {
+                color: $secondary;
+                cursor: pointer;
+            }
         }
     }
 }

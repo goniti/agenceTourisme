@@ -12,21 +12,6 @@
     }
 
     &__button {
-        outline: none;
-        border: none;
-        cursor: pointer;
-        font-size: .75rem;
-        font-weight: 700;
-        border-radius: 5px;
-        padding: 1em;
-        transition: background-color .35s ease-out;
-
-        &--add {
-            color: $secondary;
-
-            &:hover {
-                background-color: $primary;
-            }
-        }
+       margin-bottom: 1em;
     }
 }

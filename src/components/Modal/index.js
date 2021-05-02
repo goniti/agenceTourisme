@@ -1,21 +1,24 @@
 import { useState } from 'react'
 import { GoX } from 'react-icons/go'
+import PropTypes from 'prop-types'
 
 import './modal.scss'
 
 const Modal = ({
-	handleSearch,
+	handleSuggest,
 	handleSubmit,
 	handleLimit,
 	handleSelect,
 	handleRemove,
+	handleNaming,
 	zoneId,
 	cities,
-	inputValue,
+	inputSuggestValue,
 	onChangeValue,
+	inputNamingValue,
+	onChangeNamingValue,
 	autoSuggest,
 	zoneData,
-	hasData,
 	title,
 	error,
 }) => {
@@ -25,7 +28,15 @@ const Modal = ({
 	return (
 		<div className="modal">
 			<p className="modal__title">{title}</p>
-			<p className="modal__subtitle">Nom de la zone</p>
+
+			<label className="modal__subtitle">Nom de la zone</label>
+			<input
+				value={inputNamingValue}
+				onChange={(event) => {
+					handleNaming()
+					onChangeNamingValue(event.target.value)
+				}}
+			></input>
 
 			<form onSubmit={handleSubmit}>
 				<div className="modal__form__suggest">
@@ -52,15 +63,24 @@ const Modal = ({
 						</div>
 					) : (
 						<div className="suggest__validate">
+							<i
+								onClick={() => {
+									setOpenSuggest(false)
+									onChangeValue('')
+								}}
+								className="suggest__input__icon"
+							>
+								<GoX size={16} />
+							</i>
 							<input
 								id="city"
 								className="suggest__input"
 								type="text"
-								value={inputValue}
+								value={inputSuggestValue}
 								onChange={(event) => {
 									onChangeValue(event.target.value)
 									setOpenSuggest(true)
-									handleSearch()
+									handleSuggest()
 								}}
 							/>
 						</div>
@@ -85,20 +105,18 @@ const Modal = ({
 				</div>
 				{zoneData &&
 					zoneData.municipalities.map((municipality) => (
-						<div key={municipality.id} className="modal__picture__wrapper">
+						<div key={municipality.id}>
 							<p className="modal__picture__label">{municipality.municipality}</p>
-
-							{municipality.pictures.map((picture) => (
-								<div key={picture.id}>
-									<div className="modal__picture__content">
-										<img
-											src={picture.src}
-											alt={picture.alt}
-											className="modal__picture"
-										></img>
-									</div>
-								</div>
-							))}
+							<div className="modal__picture__wrapper">
+								{municipality.pictures.map((picture) => (
+									<img
+										key={picture.id}
+										src={picture.src}
+										alt={picture.alt}
+										className="modal__picture"
+									></img>
+								))}
+							</div>
 						</div>
 					))}
 				<div className="modal__form__submit">
@@ -109,4 +127,38 @@ const Modal = ({
 		</div>
 	)
 }
+
+Modal.propTypes = {
+	handleSuggest: PropTypes.func,
+	handleSubmit: PropTypes.func,
+	handleLimit: PropTypes.func,
+	handleSelect: PropTypes.func,
+	handleRemove: PropTypes.func,
+	handleNaming: PropTypes.func,
+	onChangeValue: PropTypes.func,
+	onChangeNamingValue: PropTypes.func,
+	zoneId: PropTypes.string.isRequired,
+	inputSuggestValue: PropTypes.string,
+	inputNamingValue: PropTypes.string,
+	title: PropTypes.string.isRequired,
+	error: PropTypes.string,
+	autoSuggest: PropTypes.arrayOf(
+		PropTypes.shape({
+			_score: PropTypes.number.isRequired,
+			code: PropTypes.string.isRequired,
+			codeDepartement: PropTypes.string.isRequired,
+			codeRegion: PropTypes.string.isRequired,
+			codesPostaux: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+			nom: PropTypes.string.isRequired,
+			population: PropTypes.number.isRequired,
+		}).isRequired
+	).isRequired,
+	cities: PropTypes.arrayOf(
+		PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+		}).isRequired
+	).isRequired,
+}
+
 export default Modal

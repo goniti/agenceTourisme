@@ -4,15 +4,16 @@ import Confirm from '../Confirm'
 import Header from '../Header'
 import ListZone from '../ListZone'
 import Modal from '../Modal'
-//import ListZone from '../ListZone'
 import './App.scss'
 
 const App = () => {
 	//* Hook data management
 	const [dataZones, setDataZones] = useState([])
+	//* Hook for defining a zone name
+	const [zoneNaming, setZoneNaming] = useState('')
 	//* Hook for an auto suggest system
 	const [searchSuggest, setSearchSuggest] = useState('')
-	const [resultSuggest, setResultSuggest] = useState({})
+	const [resultSuggest, setResultSuggest] = useState([])
 	const [errorApiRequest, setError] = useState(false)
 	//* Hook for Modal
 	const [selectedOption, setSelectedOption] = useState([])
@@ -23,22 +24,7 @@ const App = () => {
 	//*Hook for Confirm
 	const [openConfirm, setOpenConfirm] = useState(false)
 
-	const openAddZoneModal = () => {
-		setSelectedOption([])
-		setOpenModal(true)
-		setZoneId(uuidv4())
-	}
-	const openEditZoneModal = (id) => {
-		const zone = dataZones.find((zone) => zone.id === id)
-		const options = zone.municipalities.map((municipality) => {
-			return { id: uuidv4(), name: municipality.municipality }
-		})
-		setSelectedOption([...options])
-		setOpenModal(true)
-		setZoneId(id)
-	}
-
-	const onChangeSearch = () => {
+	const getSuggest = () => {
 		fetch(`https://geo.api.gouv.fr/communes?nom=${searchSuggest}&boost=population&limit=5`)
 			.then((response) => response.json())
 			.then((json) => {
@@ -49,6 +35,7 @@ const App = () => {
 				setError(true)
 			})
 	}
+
 	const onSelect = (cityName, idZone, currentZone) => {
 		const forbidsDuplication = selectedOption.find((city) => city.name === cityName)
 		if (forbidsDuplication) {
@@ -63,7 +50,6 @@ const App = () => {
 		setSelectedOption(selectedOptionCopy)
 		setSearchSuggest('')
 		setErrorMessage('')
-		//setDataCreateZone(generateData(option))
 		const dataZonesCopy = [...dataZones]
 		let zone = dataZonesCopy.find((zone) => zone.id === idZone)
 		if (zone === undefined) {
@@ -73,28 +59,13 @@ const App = () => {
 		zone.municipalities.push(generateMunicipality(cityName))
 		setDataZones(dataZonesCopy)
 	}
-	const onRemoveMunicipality = (municipalityName, idZone) => {
-		let selectedOptionCopy = [...selectedOption]
-		selectedOptionCopy = selectedOptionCopy.filter((city) => city.name !== municipalityName)
-		setSelectedOption(selectedOptionCopy)
-		const dataZonesCopy = [...dataZones]
-		let zone = dataZonesCopy.find((zone) => zone.id === idZone)
-		if (zone) {
-			zone.municipalities = zone.municipalities.filter(
-				(municipality) => municipality.municipality !== municipalityName
-			)
+
+	const limitReached = () => {
+		if (selectedOption.length > 2) {
+			return [true]
 		}
-
-		setDataZones(dataZonesCopy)
 	}
 
-	const onRemoveZone = (idZone) => {
-		let dataZonesCopy = [...dataZones]
-		dataZonesCopy = dataZonesCopy.filter((zone) => zone.id !== idZone)
-		setDataZones(dataZonesCopy)
-	}
-
-	// Handle Data
 	const generateMunicipality = (municipality) => {
 		const numberOfImage = 5
 		let srcImages = []
@@ -113,33 +84,20 @@ const App = () => {
 			pictures: srcImages,
 		}
 	}
+	const onRemoveMunicipality = (municipalityName, idZone) => {
+		let selectedOptionCopy = [...selectedOption]
+		selectedOptionCopy = selectedOptionCopy.filter((city) => city.name !== municipalityName)
+		setSelectedOption(selectedOptionCopy)
 
-	//TODO Creation de l'objet ci dessu
-
-	// Handle modal
-	const showTitleModal = (title) => {
-		setTitleModal(title)
-	}
-
-	const onSubmit = (event) => {
-		event.preventDefault()
-		const zone = dataZones.find((zone) => zone.id === zoneId)
-
-		if (zone && zone.municipalities.length === 0) {
-			return setErrorMessage('Choisir au minimum une ville avant de sauvegarder')
+		const dataZonesCopy = [...dataZones]
+		let zone = dataZonesCopy.find((zone) => zone.id === idZone)
+		if (zone) {
+			zone.municipalities = zone.municipalities.filter(
+				(municipality) => municipality.municipality !== municipalityName
+			)
 		}
 
-		setOpenModal(false)
-	}
-
-	const limitReached = () => {
-		if (selectedOption.length > 2) {
-			return [true]
-		}
-	}
-
-	const isThereAnyData = () => {
-		return dataZones.length > 0
+		setDataZones(dataZonesCopy)
 	}
 
 	const getZone = () => {
@@ -150,20 +108,62 @@ const App = () => {
 
 		return {
 			id: zoneId,
-			title: `zone_${zoneId}`,
+			title: `${zoneNaming}`,
 			municipalities: [],
 		}
+	}
+	const onRemoveZone = (idZone) => {
+		let dataZonesCopy = [...dataZones]
+		dataZonesCopy = dataZonesCopy.filter((zone) => zone.id !== idZone)
+		setDataZones(dataZonesCopy)
+	}
+
+	const isThereAnyData = () => {
+		return dataZones.length > 0
+	}
+
+	const openAddZoneModal = () => {
+		showTitleModal("Création d'une zone")
+
+		setSelectedOption([])
+		setOpenModal(true)
+		setZoneId(uuidv4())
+	}
+
+	const openEditZoneModal = (id) => {
+		showTitleModal("Edition d'une zone")
+
+		const zone = dataZones.find((zone) => zone.id === id)
+		const options = zone.municipalities.map((municipality) => {
+			return { id: uuidv4(), name: municipality.municipality }
+		})
+		setSelectedOption([...options])
+		setOpenModal(true)
+		setZoneId(id)
+	}
+
+	const showTitleModal = (title) => {
+		setTitleModal(title)
+	}
+
+	const onSubmit = (event) => {
+		event.preventDefault()
+		const zone = dataZones.find((zone) => zone.id === zoneId)
+
+		if (zone && zone.municipalities.length === 0) {
+			return setErrorMessage('Choisir au minimum une ville avant de sauvegarder')
+		} else if (!zoneNaming) {
+			return setErrorMessage('Saisissez un nom de zone')
+		}
+
+		setOpenModal(false)
 	}
 
 	if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
 	return (
 		<div className="App">
 			{!openConfirm && !openModal && (
-				<Header
-					hasData={isThereAnyData()}
-					showModal={openAddZoneModal}
-					titleModal={showTitleModal}
-				/>
+				<Header hasData={isThereAnyData()} showModal={openAddZoneModal} />
 			)}
 
 			{!openConfirm && !openModal && (
@@ -192,7 +192,8 @@ const App = () => {
 			{!openConfirm && openModal && (
 				<Modal
 					zoneId={zoneId}
-					handleSearch={onChangeSearch}
+					handleSuggest={getSuggest}
+					handleNaming={getZone}
 					handleSubmit={onSubmit}
 					handleLimit={limitReached()}
 					handleRemove={(idMunicipality, zoneId) =>
@@ -200,11 +201,12 @@ const App = () => {
 					}
 					handleSelect={onSelect}
 					cities={selectedOption}
-					inputValue={searchSuggest}
+					inputSuggestValue={searchSuggest}
 					onChangeValue={setSearchSuggest}
+					inputNamingValue={zoneNaming}
+					onChangeNamingValue={setZoneNaming}
 					autoSuggest={resultSuggest}
 					zoneData={getZone()}
-					hasData={isThereAnyData()}
 					title={titleModal}
 					error={errorMessage}
 				/>

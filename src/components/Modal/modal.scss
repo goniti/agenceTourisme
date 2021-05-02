@@ -11,6 +11,7 @@
         color: $tertiary;
         font-size: $smallText;
         line-height: 2.5em;
+        margin-right: .5em;
     }
 
     &__form {
@@ -21,7 +22,6 @@
             align-items: center;
             margin-top: 1em;
         }
-
 
         &__suggest {
             display: flex;
@@ -39,7 +39,7 @@
     }
 
     &__picture {
-        margin-right: 2em;
+        margin-bottom: .5em;
 
         &__content {
             margin-bottom: 1rem
@@ -47,6 +47,14 @@
 
         &__label {
             @extend .modal__subtitle;
+        }
+
+        &__wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
         }
     }
 }
@@ -62,10 +70,23 @@
 
     &__input {
         flex-basis: 100%;
+
+        &__icon {
+            border: 1px solid black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: absolute;
+            right: 1rem;
+            top: .5rem;
+        }
     }
 
     &__validate {
         display: flex;
+        position: relative;
 
         &--icon {
             margin-left: .3rem;

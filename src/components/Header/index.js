@@ -2,12 +2,11 @@ import './header.scss'
 import { GoPlusSmall } from 'react-icons/go'
 import PropTypes from 'prop-types'
 
-const Header = ({ hasData, showModal, titleModal }) => {
-	console.log(hasData)
+const Header = ({ hasData, showModal }) => {
 	return (
-		<header className="App__header" onClick={() => titleModal("Création d'une zone")}>
+		<header className="App__header">
 			{!hasData && <p className="App__header__text">Aucune zone enregistrée</p>}
-			<button onClick={showModal} className="button--bordered">
+			<button onClick={showModal} className="App__header__button button--bordered">
 				Ajouter une zone <GoPlusSmall size={16} />
 			</button>
 		</header>
@@ -15,9 +14,8 @@ const Header = ({ hasData, showModal, titleModal }) => {
 }
 
 Header.propTypes = {
-	hasData: PropTypes.bool.isRequired,
 	showModal: PropTypes.func.isRequired,
-	titleModal: PropTypes.func.isRequired,
+	hasData: PropTypes.bool.isRequired,
 }
 
 export default Header

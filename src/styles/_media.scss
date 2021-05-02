@@ -1,5 +1,10 @@
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 640px) {
+    .App__header {
+        justify-content: center;
+        flex-direction: row !important;
+    }
+
     .modal {
         margin: 1em;
         padding: 1em 0.5em 2em 3em;
@@ -9,9 +14,10 @@
                 max-width: 50%;
             }
         }
+
+        &__picture__wrapper {
+            flex-direction: row !important;
+        }
     }
-    .App__header {
-        justify-content: center;
-        flex-direction: row !important;
-    }
+
 }

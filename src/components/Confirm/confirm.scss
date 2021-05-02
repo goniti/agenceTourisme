@@ -1,0 +1,27 @@
+@import '../../styles/vars';
+
+.confirm {
+    display: flex;
+    height: 50vh;
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-basis: 100%;
+    }
+
+    &__title{
+        color: $primary;
+        font-weight: 700;
+    }
+    &__button {
+        padding: .7em 2rem;
+        margin-right: .5rem;
+    }
+    &__buttons {
+        margin: 1rem;
+        display: flex;
+    }
+}
