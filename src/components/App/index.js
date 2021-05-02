@@ -122,7 +122,9 @@ const App = () => {
 
   const openAddZoneModal = () => {
     showTitleModal("Création d'une zone")
-
+    let copyZoneNaming = [...zoneNaming]
+    copyZoneNaming = ''
+    setZoneNaming(copyZoneNaming)
     setSelectedOption([])
     setOpenModal(true)
     setZoneId(uuidv4())
