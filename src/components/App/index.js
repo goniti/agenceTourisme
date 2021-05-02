@@ -58,6 +58,8 @@ const App = () => {
     }
     zone.municipalities.push(generateMunicipality(cityName))
     setDataZones(dataZonesCopy)
+
+    localStorage.setItem('saveDataZones', JSON.stringify(dataZonesCopy))
   }
 
   const limitReached = () => {
