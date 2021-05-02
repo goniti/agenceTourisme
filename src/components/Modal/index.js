@@ -24,6 +24,7 @@ const Modal = ({
   const [openSuggest, setOpenSuggest] = useState(false)
   const userWrite = inputSuggestValue !== ''
   const citiesLimit = cities.length > 2
+  const buttonSubmit = cities.length === 0
 
   return (
     <div className="modal">
@@ -112,7 +113,11 @@ const Modal = ({
           ))}
         <div className="modal__form__submit">
           <span className="modal__form__error">{error}</span>
-          <input className="button--bordered" type="submit" value="Sauvegarder" />
+          {buttonSubmit ? (
+            <input className="button--bordered" type="submit" value="Retour" />
+          ) : (
+            <input className="button--bordered" type="submit" value="Sauvegarder" />
+          )}
         </div>
       </form>
     </div>
