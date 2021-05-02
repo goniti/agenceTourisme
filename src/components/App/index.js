@@ -24,8 +24,8 @@ const App = () => {
   //*Hook for Confirm
   const [openConfirm, setOpenConfirm] = useState(false)
 
-  const getSuggest = () => {
-    fetch(`https://geo.api.gouv.fr/communes?nom=${searchSuggest}&boost=population&limit=5`)
+  const getSuggest = (value) => {
+    fetch(`https://geo.api.gouv.fr/communes?nom=${value}&boost=population&limit=5`)
       .then((response) => response.json())
       .then((json) => {
         setResultSuggest(json.map((results) => results))
@@ -190,13 +190,13 @@ const App = () => {
       {!openConfirm && openModal && (
         <Modal
           zoneId={zoneId}
-          handleSuggest={getSuggest}
           handleNaming={getZone}
           handleSubmit={onSubmit}
           handleLimit={limitReached()}
           handleRemove={(idMunicipality, zoneId) => onRemoveMunicipality(idMunicipality, zoneId)}
           handleSelect={onSelect}
           cities={selectedOption}
+          handleSuggest={getSuggest}
           inputSuggestValue={searchSuggest}
           onChangeValue={setSearchSuggest}
           inputNamingValue={zoneNaming}

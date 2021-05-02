@@ -75,8 +75,8 @@ const Modal = ({
                 value={inputSuggestValue}
                 onChange={(event) => {
                   onChangeValue(event.target.value)
+                  handleSuggest(event.target.value)
                   setOpenSuggest(true)
-                  handleSuggest()
                 }}
               />
             </div>
