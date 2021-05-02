@@ -62,12 +62,6 @@ const App = () => {
     localStorage.setItem('saveDataZones', JSON.stringify(dataZonesCopy))
   }
 
-  const limitReached = () => {
-    if (selectedOption.length > 2) {
-      return [true]
-    }
-  }
-
   const generateMunicipality = (municipality) => {
     const numberOfImage = 5
     let srcImages = []
@@ -121,12 +115,20 @@ const App = () => {
   const isThereAnyData = () => {
     return dataZones.length > 0
   }
-
-  const openAddZoneModal = () => {
-    showTitleModal("Création d'une zone")
+  const clearInput = () => {
     let copyZoneNaming = [...zoneNaming]
     copyZoneNaming = ''
     setZoneNaming(copyZoneNaming)
+
+    let copySearchSuggest = [...searchSuggest]
+    copySearchSuggest = ''
+    setSearchSuggest(copySearchSuggest)
+
+    setErrorMessage('')
+  }
+  const openAddZoneModal = () => {
+    showTitleModal("Création d'une zone")
+    clearInput()
     setSelectedOption([])
     setOpenModal(true)
     setZoneId(uuidv4())
@@ -154,7 +156,7 @@ const App = () => {
 
     if (zone && zone.municipalities.length === 0) {
       return setErrorMessage('Choisir au minimum une ville avant de sauvegarder')
-    } else if (!zoneNaming) {
+    } else if (selectedOption.length !== 0 && !zoneNaming) {
       return setErrorMessage('Saisissez un nom de zone')
     }
 
@@ -194,7 +196,6 @@ const App = () => {
           zoneId={zoneId}
           handleNaming={getZone}
           handleSubmit={onSubmit}
-          handleLimit={limitReached()}
           handleRemove={(idMunicipality, zoneId) => onRemoveMunicipality(idMunicipality, zoneId)}
           handleSelect={onSelect}
           cities={selectedOption}

@@ -7,7 +7,6 @@ import './modal.scss'
 const Modal = ({
   handleSuggest,
   handleSubmit,
-  handleLimit,
   handleSelect,
   handleRemove,
   handleNaming,
@@ -24,6 +23,7 @@ const Modal = ({
 }) => {
   const [openSuggest, setOpenSuggest] = useState(false)
   const userWrite = inputSuggestValue !== ''
+  const citiesLimit = cities.length > 2
 
   return (
     <div className="modal">
@@ -53,7 +53,7 @@ const Modal = ({
               </span>
             ))}
           </div>
-          {handleLimit ? (
+          {citiesLimit ? (
             <div className="suggest__validate">La limite de ville pour cette zone est atteinte.</div>
           ) : (
             <div className="suggest__validate">
@@ -122,7 +122,6 @@ const Modal = ({
 Modal.propTypes = {
   handleSuggest: PropTypes.func,
   handleSubmit: PropTypes.func,
-  handleLimit: PropTypes.func,
   handleSelect: PropTypes.func,
   handleRemove: PropTypes.func,
   handleNaming: PropTypes.func,
