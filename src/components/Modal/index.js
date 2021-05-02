@@ -34,7 +34,7 @@ const Modal = ({
       <input
         value={inputNamingValue}
         onChange={(event) => {
-          handleNaming()
+          handleNaming(event.target.value, zoneId)
           onChangeNamingValue(event.target.value)
         }}
       ></input>

@@ -10,7 +10,7 @@ const App = () => {
   //* Hook data management
   const [dataZones, setDataZones] = useState([])
   //* Hook for defining a zone name
-  const [zoneNaming, setZoneNaming] = useState('')
+  const [zoneRename, setZoneRename] = useState('')
   //* Hook for an auto suggest system
   const [searchSuggest, setSearchSuggest] = useState('')
   const [resultSuggest, setResultSuggest] = useState([])
@@ -46,19 +46,19 @@ const App = () => {
       id: uuidv4(),
       name: cityName,
     })
-
     setSelectedOption(selectedOptionCopy)
     setSearchSuggest('')
     setErrorMessage('')
+
     const dataZonesCopy = [...dataZones]
     let zone = dataZonesCopy.find((zone) => zone.id === idZone)
     if (zone === undefined) {
       zone = currentZone
       dataZonesCopy.push(zone)
     }
+
     zone.municipalities.push(generateMunicipality(cityName))
     setDataZones(dataZonesCopy)
-
     localStorage.setItem('saveDataZones', JSON.stringify(dataZonesCopy))
   }
 
@@ -80,6 +80,7 @@ const App = () => {
       pictures: srcImages,
     }
   }
+
   const onRemoveMunicipality = (municipalityName, idZone) => {
     let selectedOptionCopy = [...selectedOption]
     selectedOptionCopy = selectedOptionCopy.filter((city) => city.name !== municipalityName)
@@ -102,7 +103,7 @@ const App = () => {
 
     return {
       id: zoneId,
-      title: `${zoneNaming}`,
+      title: `${zoneRename}`,
       municipalities: [],
     }
   }
@@ -112,13 +113,21 @@ const App = () => {
     setDataZones(dataZonesCopy)
   }
 
+  const onRenameZone = (title, idZone) => {
+    const zone = dataZones.find((zone) => idZone === zone.id)
+    if (zone) {
+      zone.title = title
+    }
+    return
+  }
+
   const isThereAnyData = () => {
     return dataZones.length > 0
   }
   const clearInput = () => {
-    let copyZoneNaming = [...zoneNaming]
+    let copyZoneNaming = [...zoneRename]
     copyZoneNaming = ''
-    setZoneNaming(copyZoneNaming)
+    setZoneRename(copyZoneNaming)
 
     let copySearchSuggest = [...searchSuggest]
     copySearchSuggest = ''
@@ -156,11 +165,12 @@ const App = () => {
 
     if (zone && zone.municipalities.length === 0) {
       return setErrorMessage('Choisir au minimum une ville avant de sauvegarder')
-    } else if (selectedOption.length !== 0 && !zoneNaming) {
+    } else if (selectedOption.length !== 0 && !zoneRename) {
       return setErrorMessage('Saisissez un nom de zone')
     }
 
     setOpenModal(false)
+    console.log(dataZones)
   }
 
   if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
@@ -194,7 +204,7 @@ const App = () => {
       {!openConfirm && openModal && (
         <Modal
           zoneId={zoneId}
-          handleNaming={getZone}
+          handleNaming={(renameZone, zoneId) => onRenameZone(renameZone, zoneId)}
           handleSubmit={onSubmit}
           handleRemove={(idMunicipality, zoneId) => onRemoveMunicipality(idMunicipality, zoneId)}
           handleSelect={onSelect}
@@ -202,8 +212,8 @@ const App = () => {
           handleSuggest={getSuggest}
           inputSuggestValue={searchSuggest}
           onChangeValue={setSearchSuggest}
-          inputNamingValue={zoneNaming}
-          onChangeNamingValue={setZoneNaming}
+          inputNamingValue={zoneRename}
+          onChangeNamingValue={setZoneRename}
           autoSuggest={resultSuggest}
           zoneData={getZone()}
           title={titleModal}
