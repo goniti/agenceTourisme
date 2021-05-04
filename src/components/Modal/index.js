@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { GoX } from 'react-icons/go'
 import PropTypes from 'prop-types'
-
+import PictureGallery from '../PictureGallery'
 import './modal.scss'
 
 const Modal = ({
@@ -18,6 +18,7 @@ const Modal = ({
   onChangeNamingValue,
   autoSuggest,
   zoneData,
+  hasData,
   title,
   error,
 }) => {
@@ -37,7 +38,7 @@ const Modal = ({
           handleNaming(event.target.value, zoneId)
           onChangeNamingValue(event.target.value)
         }}
-      ></input>
+      />
 
       <form onSubmit={handleSubmit}>
         <div className="modal__form__suggest">
@@ -100,17 +101,9 @@ const Modal = ({
             </ul>
           )}
         </div>
-        {zoneData &&
-          zoneData.municipalities.map((municipality) => (
-            <div key={municipality.id}>
-              <p className="modal__picture__label">{municipality.municipality}</p>
-              <div className="modal__picture__wrapper">
-                {municipality.pictures.map((picture) => (
-                  <img key={picture.id} src={picture.src} alt={picture.alt} className="modal__picture"></img>
-                ))}
-              </div>
-            </div>
-          ))}
+
+        {hasData && <PictureGallery data={zoneData} />}
+
         <div className="modal__form__submit">
           <span className="modal__form__error">{error}</span>
           {buttonSubmit ? (
@@ -154,6 +147,12 @@ Modal.propTypes = {
       name: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
+  hasData: PropTypes.bool,
+  zoneData: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    municipalities:PropTypes.array
+}).isRequired
 }
 
 export default Modal

@@ -1,5 +1,5 @@
 import './listzone.scss'
-import { GoTrashcan } from 'react-icons/go'
+import React, { GoTrashcan } from 'react-icons/go'
 import PropTypes from 'prop-types'
 
 const ListZone = ({ dataZones, handleEdit, handleRemove }) => {

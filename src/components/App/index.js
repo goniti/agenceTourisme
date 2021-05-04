@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import React, { useState } from 'react'
+import { v4 as uuid } from 'uuid'
 import Confirm from '../Confirm'
 import Header from '../Header'
 import ListZone from '../ListZone'
@@ -43,7 +43,7 @@ const App = () => {
     }
     const selectedOptionCopy = [...selectedOption]
     selectedOptionCopy.push({
-      id: uuidv4(),
+      id: uuid(),
       name: cityName,
     })
     setSelectedOption(selectedOptionCopy)
@@ -56,7 +56,6 @@ const App = () => {
       zone = currentZone
       dataZonesCopy.push(zone)
     }
-
     zone.municipalities.push(generateMunicipality(cityName))
     setDataZones(dataZonesCopy)
     localStorage.setItem('saveDataZones', JSON.stringify(dataZonesCopy))
@@ -68,14 +67,14 @@ const App = () => {
 
     for (let indexImage = 0; indexImage < numberOfImage; indexImage++) {
       srcImages.push({
-        id: uuidv4(),
+        id: uuid(),
         src: `https://picsum.photos/180/180?random=${Math.round(Math.random() * 1000)}`,
         alt: `Photo numero 0${[indexImage + 1]}`,
       })
     }
 
     return {
-      id: uuidv4(),
+      id: uuid(),
       municipality,
       pictures: srcImages,
     }
@@ -107,6 +106,7 @@ const App = () => {
       municipalities: [],
     }
   }
+
   const onRemoveZone = (idZone) => {
     let dataZonesCopy = [...dataZones]
     dataZonesCopy = dataZonesCopy.filter((zone) => zone.id !== idZone)
@@ -124,6 +124,7 @@ const App = () => {
   const isThereAnyData = () => {
     return dataZones.length > 0
   }
+
   const clearInput = () => {
     let copyZoneNaming = [...zoneRename]
     copyZoneNaming = ''
@@ -135,12 +136,13 @@ const App = () => {
 
     setErrorMessage('')
   }
+
   const openAddZoneModal = () => {
     showTitleModal("Création d'une zone")
     clearInput()
     setSelectedOption([])
     setOpenModal(true)
-    setZoneId(uuidv4())
+    setZoneId(uuid())
   }
 
   const openEditZoneModal = (id) => {
@@ -148,7 +150,7 @@ const App = () => {
 
     const zone = dataZones.find((zone) => zone.id === id)
     const options = zone.municipalities.map((municipality) => {
-      return { id: uuidv4(), name: municipality.municipality }
+      return { id: uuid(), name: municipality.municipality }
     })
     setSelectedOption([...options])
     setOpenModal(true)
@@ -170,21 +172,6 @@ const App = () => {
   if (errorApiRequest) return <span>Le serveur ne répond pas...</span>
   return (
     <div className="App">
-      {!openConfirm && !openModal && <Header hasData={isThereAnyData()} showModal={openAddZoneModal} />}
-
-      {!openConfirm && !openModal && (
-        <ListZone
-          dataZones={dataZones}
-          handleEdit={(idZone) => {
-            openEditZoneModal(idZone)
-          }}
-          handleRemove={(idZone) => {
-            setOpenConfirm(true)
-            setZoneId(idZone)
-          }}
-        />
-      )}
-
       {openConfirm && (
         <Confirm
           handleCancel={() => setOpenConfirm(false)}
@@ -210,8 +197,23 @@ const App = () => {
           onChangeNamingValue={setZoneRename}
           autoSuggest={resultSuggest}
           zoneData={getZone()}
+          hasData={isThereAnyData()}
           title={titleModal}
           error={errorMessage}
+        />
+      )}
+
+      {!openConfirm && !openModal && <Header hasData={isThereAnyData()} showModal={openAddZoneModal} />}
+      {!openConfirm && !openModal && (
+        <ListZone
+          dataZones={dataZones}
+          handleEdit={(idZone) => {
+            openEditZoneModal(idZone)
+          }}
+          handleRemove={(idZone) => {
+            setOpenConfirm(true)
+            setZoneId(idZone)
+          }}
         />
       )}
     </div>
