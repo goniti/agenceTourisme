@@ -1,4 +1,6 @@
 import './confirm.scss'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Confirm = ({ handleRemove, handleCancel }) => {
   return (
@@ -19,4 +21,8 @@ const Confirm = ({ handleRemove, handleCancel }) => {
   )
 }
 
+Confirm.propTypes = {
+  handleRemove: PropTypes.func.isRequired,
+  handleCancel: PropTypes.func.isRequired,
+}
 export default Confirm

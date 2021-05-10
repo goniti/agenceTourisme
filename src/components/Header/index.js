@@ -1,6 +1,8 @@
 import './header.scss'
 import { GoPlusSmall } from 'react-icons/go'
+import React from 'react'
 import PropTypes from 'prop-types'
+
 
 const Header = ({ hasData, showModal }) => {
   return (

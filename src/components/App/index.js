@@ -9,6 +9,8 @@ import './App.scss'
 const App = () => {
   //* Hook data management
   const [dataZones, setDataZones] = useState([])
+  //* Hook for drag and drop Pictures
+  const [pictures, setPictures] = useState([])
   //* Hook for defining a zone name
   const [zoneRename, setZoneRename] = useState('')
   //* Hook for an auto suggest system
@@ -69,10 +71,11 @@ const App = () => {
       srcImages.push({
         id: uuid(),
         src: `https://picsum.photos/180/180?random=${Math.round(Math.random() * 1000)}`,
-        alt: `Photo numero 0${[indexImage + 1]}`,
+        alt: `Photo_${municipality}_0${[indexImage + 1]}`,
+        city: municipality,
       })
     }
-
+    setPictures([...pictures, ...srcImages])
     return {
       id: uuid(),
       municipality,
@@ -119,6 +122,25 @@ const App = () => {
       zone.title = title
     }
     return
+  }
+
+  const updateDataZones = (municipalityToUpdate, id) => {
+    const targetZone = dataZones.find((zone) => zone.id === id)
+    const zonesToKeep = dataZones.filter((zone) => zone.id !== id)
+    const targetMunicipality = targetZone.municipalities.find(
+      (municipality) => municipality.municipality === municipalityToUpdate.municipality,
+    )
+
+    const municipalitiesToKeep = targetZone.municipalities.filter((municipality) => {
+      return municipality.municipality !== targetMunicipality.municipality
+    })
+
+    const updatedDataZones = [
+      ...zonesToKeep,
+      { ...targetZone, municipalities: [...municipalitiesToKeep, municipalityToUpdate] },
+    ]
+
+    setDataZones(updatedDataZones)
   }
 
   const isThereAnyData = () => {
@@ -184,20 +206,21 @@ const App = () => {
 
       {!openConfirm && openModal && (
         <Modal
-          zoneId={zoneId}
-          handleNaming={(renameZone, zoneId) => onRenameZone(renameZone, zoneId)}
-          handleSubmit={onSubmit}
-          handleRemove={(idMunicipality, zoneId) => onRemoveMunicipality(idMunicipality, zoneId)}
-          handleSelect={onSelect}
-          cities={selectedOption}
           handleSuggest={getSuggest}
+          handleSubmit={onSubmit}
+          handleSelect={onSelect}
+          handleRemove={(idMunicipality, zoneId) => onRemoveMunicipality(idMunicipality, zoneId)}
+          handleRenameZone={(renameZone, zoneId) => onRenameZone(renameZone, zoneId)}
+          handleUpdatePictures={updateDataZones}
           inputSuggestValue={searchSuggest}
+          inputNamingZoneValue={zoneRename}
           onChangeValue={setSearchSuggest}
-          inputNamingValue={zoneRename}
-          onChangeNamingValue={setZoneRename}
-          autoSuggest={resultSuggest}
+          onChangeNamingZoneValue={setZoneRename}
+          zoneId={zoneId}
           zoneData={getZone()}
           hasData={isThereAnyData()}
+          autoSuggest={resultSuggest}
+          cities={selectedOption}
           title={titleModal}
           error={errorMessage}
         />

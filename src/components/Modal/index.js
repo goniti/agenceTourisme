@@ -9,16 +9,17 @@ const Modal = ({
   handleSubmit,
   handleSelect,
   handleRemove,
-  handleNaming,
-  zoneId,
-  cities,
+  handleRenameZone,
+  handleUpdatePictures,
   inputSuggestValue,
+  inputNamingZoneValue,
   onChangeValue,
-  inputNamingValue,
-  onChangeNamingValue,
-  autoSuggest,
+  onChangeNamingZoneValue,
+  zoneId,
   zoneData,
   hasData,
+  autoSuggest,
+  cities,
   title,
   error,
 }) => {
@@ -33,10 +34,10 @@ const Modal = ({
 
       <label className="modal__subtitle">Nom de la zone</label>
       <input
-        value={inputNamingValue}
+        value={inputNamingZoneValue}
         onChange={(event) => {
-          handleNaming(event.target.value, zoneId)
-          onChangeNamingValue(event.target.value)
+          handleRenameZone(event.target.value, zoneId)
+          onChangeNamingZoneValue(event.target.value)
         }}
       />
 
@@ -102,7 +103,7 @@ const Modal = ({
           )}
         </div>
 
-        {hasData && <PictureGallery data={zoneData} />}
+        {hasData && <PictureGallery data={zoneData} onUpdatePictures={handleUpdatePictures} />}
 
         <div className="modal__form__submit">
           <span className="modal__form__error">{error}</span>
@@ -118,16 +119,17 @@ const Modal = ({
 }
 
 Modal.propTypes = {
+  handleUpdatePictures: PropTypes.func,
   handleSuggest: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleSelect: PropTypes.func,
   handleRemove: PropTypes.func,
-  handleNaming: PropTypes.func,
+  handleRenameZone: PropTypes.func,
   onChangeValue: PropTypes.func,
-  onChangeNamingValue: PropTypes.func,
+  onChangeNamingZoneValue: PropTypes.func,
   zoneId: PropTypes.string.isRequired,
   inputSuggestValue: PropTypes.string,
-  inputNamingValue: PropTypes.string,
+  inputNamingZoneValue: PropTypes.string,
   title: PropTypes.string.isRequired,
   error: PropTypes.string,
   autoSuggest: PropTypes.arrayOf(
@@ -151,8 +153,8 @@ Modal.propTypes = {
   zoneData: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
-    municipalities:PropTypes.array
-}).isRequired
+    municipalities: PropTypes.array,
+  }).isRequired,
 }
 
 export default Modal
